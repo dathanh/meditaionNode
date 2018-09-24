@@ -19,7 +19,7 @@ exports.loggedIn = function(req, res, next) {
 
 exports.home = function(req, res) {
     req.flash("success", "request thanh cong");
-    console.log("controller :"+req.params.controller);
+console.log(req.url);
     res.render('index.ejs', {
         title: 'Home page',
         error: req.flash("error"),

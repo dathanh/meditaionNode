@@ -1,15 +1,16 @@
 var home = require('../app/controllers/home');
 
 //you can include all your controllers
-
-module.exports = function (app, passport) {
+var callDynamic=(name)=>{name()};
+module.exports = function(app, passport) {
 
     app.get('/login', home.login);
     app.get('/signup', home.signup);
 
-    app.get('/', home.loggedIn, home.home);//home
-    app.get('/home', home.loggedIn, home.home);//home
-    app.get('/logout',home.logout);
+    app.get('/', home.loggedIn, home.home); //home
+    app.get('/home', home.loggedIn, home.home); //home
+    app.get('/home/:action',home.loggedIn,  home.home); //home
+    app.get('/logout', home.logout);
 
     app.post('/signup', passport.authenticate('local-signup', {
         successRedirect: '/home', // redirect to the secure profile section
