@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <link href='/css/bootstrap.min.css' rel="stylesheet">
+    <link href='/css/font-awesome.css' rel="stylesheet">
+    <link href='/css/animate.css' rel="stylesheet">
+    <link href='/css/style.css' rel="stylesheet">
+    <link href='/css/plugins/toastr/toastr.min.css' rel="stylesheet">
+
+
+</head>
+
+<body class="gray-bg">
+    <div class="middle-box text-center loginscreen animated bounceInUp">
+        <div>
+            <h3><%='Welcome to Website Admin'%></h3>
+            <p>
+                <%='Enter your username and password to log in.'%>
+            </p>
+            <form role="form" action="/login" role="form" method="post" class="login-form">
+                <div class="form-group">
+                    <label class="sr-only" for="form-username">Email</label>
+                    <input type="text" name="email" required placeholder="Email..." class="form-username form-control" id="email">
+                </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="form-password">Password</label>
+                        <input type="password" required name="password" placeholder="Password..." class="form-password form-control" id="password">
+                    </div>
+                        <button type="submit" class="btn btn-primary block full-width m-b">Sign in!</button>
+            </form>
+            <p class="m-t"> <small><%='Copyright Author &copy;'%></small> </p>
+        </div>
+    </div>
+
+
+    <!-- Mainly scripts -->
+    <script src='jquery-2.1.1.js'></script>
+    <script src='bootstrap.min.js'></script>
+    <script src='plugins/toastr/toastr.min.js'></script>
+    <script>
+        $(document).ready(function() {
+            toastr.options = {
+                "closeButton": true,
+                "debug": true,
+                "progressBar": true,
+                "positionClass": "toast-top-right",
+                "onclick": null,
+                "showDuration": "400",
+                "hideDuration": "1000",
+                "timeOut": "7000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+            var message = $('#cake-message').val(),
+                typeMessage = $('#cake-message-type').val();
+            if (message && typeMessage) {
+                toastr[typeMessage](message);
+            }
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+.crop-photo-modal .modal-body{background: #eee; padding: 0}
+.crop-photo-modal .modal-footer{margin-top: 0}
+
+.crop-avatar{}
+	.upload-error{color: #fff; background: #E8A02D; padding: 5px 10px 7px; display: none}
+		.upload-error .icon{font-size: 23px}
+		.upload-error p{font-size: 14px; margin: 0; padding: 3px 0 0 10px}
+	.crop-content{background: #fff; padding: 10px 20px}
+		.crop-content h3{font-size: 18px; margin: 0}
+		.crop-content p{margin: 0}
+	.crop-main-section{padding: 20px 0}
+		.crop-main-section h4{font-size: 13px; font-weight: 600}
+		.crop-main-section p{font-size: 11px}
+
+		.process-photo{width: 100%; padding: 0 20px}
+
+			.crop-container{display: none}
+				.crop-wrap{width: 100%; height: 100%}
+					.crop-wrap,
+					.crop-here{margin: 0 auto}
+				.crop-container .file_input_link:hover{text-decoration: underline}
+
+				.crop-container .control-container{text-align: center; padding: 20px; position: absolute; left: -999999px}
+					.crop-container .control-container .tmp-image-container{position: absolute; left: -999999px}
+					.crop-container .control-container .rotate{display: inline-block; width: 17px; height: 20px; background: url(../img/photo_uploader_v1.png) no-repeat}
+					.crop-container .control-container .rotate-right{background-position: 0 -22px}
+					.crop-container .control-container .rotate-left:hover{background-position: 0 -67px}
+					.crop-container .control-container .rotate-right:hover{background-position: 0 -89px}
+
+		.preview-container{width: 240px; padding: 0 20px}
+			.preview-wrap{}
+				.preview-item{overflow: hidden;}
+				.p150x150{width: 150px; height: 150px}
+				.p150x56{width: 150px; height: 56px}
+				.p72x52{width: 72px; height: 52px; margin-top: 6px}
+				.p36x36{width: 36px; height: 36px; margin: 6px 0 0 6px}
+				.p29x29{width: 29px; height: 29px; margin: 6px 0 0 6px}
+                .p250x150{width: 250px; height: 150px; margin: 6px 0 0 6px;}
+                .p200x300{width: 200px; height: 300px; margin: 6px 0 0 6px;}
+
+@media all and (max-width: 400px)  {
+	.process-photo,
+	.preview-container{width: 100%}
+	.p72x52{margin: 0 0 0 6px}
+}
+
+.release-container{}
+
+.test-caman{}
+	.test-caman .img-container{width: 300px; height: 300px}
+		.test-caman .img-container img{max-width: 300px; max-height: 300px}
+	.test-caman .action-container .rotate{display: inline-block; width: 17px; height: 20px; background: url(../img/photo_uploader_v1.png) no-repeat}
+	.test-caman .action-container .rotate-right-test{background-position: 0 -22px}
+	.test-caman .action-container .rotate-left-test:hover{background-position: 0 -67px}
+	.test-caman .action-container .rotate-right-test:hover{background-position: 0 -89px}
