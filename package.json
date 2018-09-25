@@ -20,6 +20,7 @@
     "express-session": "latest",
     "fs-extra": "latest",
     "http-proxy": "latest",
+    "inflector-js": "^1.0.1",
     "md5": "latest",
     "mime": "latest",
     "mongoose": "latest",

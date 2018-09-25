@@ -4,6 +4,7 @@ var app = express();
 var multer = require('multer')
 var constants = require('constants');
 var constant = require('./config/constants');
+var createRoutes = require('./config/createRoutes');
 
 
 var port = process.env.PORT || 8042;
@@ -20,16 +21,22 @@ var bodyParser = require('body-parser');
 var dateFormat = require('dateformat');
 var now = new Date();
 var expressLayouts = require('express-ejs-layouts');
+var menuContent = require('./config/menu');
+
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 app.use(expressLayouts);
 
 /***************Mongodb configuratrion********************/
 var mongoose = require('mongoose');
 var configDB = require('./config/database.js');
 //configuration ===============================================================
-mongoose.connect(configDB.url, { useNewUrlParser: true }); // connect to our database
+mongoose.connect(configDB.url, {
+    useNewUrlParser: true
+}); // connect to our database
 
 
 require('./config/passport')(passport); // pass passport for configuration
@@ -67,12 +74,25 @@ require('./config/routes.js')(app, passport); // load our routes and pass in our
 app.listen(port);
 console.log('The magic happens on port ' + port);
 
+//variable global veiw
+createRoutes.setResource('ewrkuewyrkuy')
+app.locals = {
+    menuContent: menuContent,
+    tester:'ewurtwyiuryiwy',
+    createRoutes: createRoutes.getResource(),
+}
+
 //catch 404 and forward to error handler
-app.use(function (req, res, next) {
-    res.status(404).render('404', {title: "Sorry, page not found", session: req.sessionbo});
+app.use(function(req, res, next) {
+    res.status(404).render('404', {
+        title: "Sorry, page not found",
+        session: req.sessionbo
+    });
 });
 
-app.use(function (req, res, next) {
-    res.status(500).render('404', {title: "Sorry, page not found"});
+app.use(function(req, res, next) {
+    res.status(500).render('404', {
+        title: "Sorry, page not found"
+    });
 });
 exports = module.exports = app;

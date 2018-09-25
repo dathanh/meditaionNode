@@ -3,7 +3,11 @@ var bcrypt = require('bcrypt-nodejs');
 var dateFormat = require('dateformat');
 var flash = require('connect-flash')
 var routes = require('../../config/routes');
-
+var createRoutes = require('../../config/createRoutes');
+const path = require('path');
+const fs = require('fs');
+//joining path of directory
+const directoryPath = path.join(__dirname, 'controllers');
 exports.loggedIn = function(req, res, next) {
     if (req.session.user) { // req.session.passport._id
 
@@ -19,7 +23,12 @@ exports.loggedIn = function(req, res, next) {
 
 exports.home = function(req, res) {
     req.flash("success", "request thanh cong");
-console.log(req.url);
+    createRoutes.getFilename(
+        (filename)=>{
+            console.log(filename);
+        }
+    );
+    console.log(req.url);
     res.render('index.ejs', {
         title: 'Home page',
         error: req.flash("error"),
