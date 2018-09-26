@@ -1,0 +1,96 @@
+<div class="ibox float-e-margins">
+    <div>
+        <h5><?php echo __('List Admin User'); ?></h5>
+    </div>
+    <div class="ibox-content">
+        <div class="row">
+            <div class="col-sm-4 m-b-xs">
+                <?= $this->Html->link('<i class="glyphicon glyphicon-list-alt"></i> ' . __('List Admin User'), ['action' => 'index'], ['title' => __('View'), 'class' => 'btn btn-primary', 'escape' => false]) ?>
+            </div>
+        </div>
+
+        <div class="box-body">
+            <form method="post" class='form-horizontal' novalidate='novalidate'>
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <div class="form-group <?php echo (!empty($errors['admin_role_id']) ? 'has-error' : ''); ?>">
+                    <label class="col-md-2 control-label" for="admin_role_id"><?php echo __('Role'); ?></label>
+                    <div class="col-md-10">
+                        <select id="admin_role_id" name="admin_role_id" class="form-control select2">
+                            <option value="1">abc</option>
+                            <option value="2">xyz</option>
+                    </select>
+
+                        <!-- <label class="error-message"><?php echo implode('<br />', $errors['admin_role_id']); ?></label> -->
+
+                    </div>
+                </div>
+                <div class="form-group <?php echo (!empty($errors['first_name']) ? 'has-error' : ''); ?>">
+                    <label class="col-md-2 control-label" for="first_name"><?php echo __('First name'); ?></label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" id="first_name" name="first_name" placeholder="<%= __('First name') %>" value="" />
+                        <?php if (!empty($errors['first_name'])): ?>
+                        <label class="error-message"><?php echo implode('<br />', $errors['first_name']); ?></label>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <div class="form-group <?php echo (!empty($errors['last_name']) ? 'has-error' : ''); ?>">
+                    <label class="col-md-2 control-label" for="last_name"><?php echo __('Last name'); ?></label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="<?php echo __('Last name'); ?>" value="<?php echo $adminUser->last_name; ?>" />
+                        <?php if (!empty($errors['last_name'])): ?>
+                        <label class="error-message"><?php echo implode('<br />', $errors['last_name']); ?></label>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <div class="form-group <?php echo (!empty($errors['email']) ? 'has-error' : ''); ?>">
+                    <label class="col-md-2 control-label" for="email"><?php echo __('Email'); ?></label>
+                    <div class="col-md-10">
+                        <input type="email" class="form-control" id="email" name="email" placeholder="<?php echo __('Email'); ?>" value="<?php echo $adminUser->email; ?>" />
+                        <?php if (!empty($errors['email'])): ?>
+                        <label class="error-message"><?php echo implode('<br />', $errors['email']); ?></label>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+                <div class="form-group <?php echo (!empty($errors['password']) ? 'has-error' : ''); ?>">
+                    <label class="col-md-2 control-label" for="password"><?php echo __('Password'); ?></label>
+                    <div class="col-md-10">
+                        <input autocomplete="off" type="password" class="form-control" id="password" name="password" placeholder="<?php echo __('Password'); ?>"  />
+                        <?php if (!empty($errors['password'])): ?>
+                        <label class="error-message"><?php echo implode('<br />', $errors['password']); ?></label>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <div class="form-group <?php echo (!empty($errors['password_confirm']) ? 'has-error' : ''); ?>">
+                    <label class="col-md-2 control-label" for="password_confirm"><?php echo __('Password confirm'); ?></label>
+                    <div class="col-md-10">
+                        <input autocomplete="off" type="password" class="form-control" id="password_confirm" name="password_confirm" placeholder="<?php echo __('Password confirm'); ?>"  />
+                        <?php if (!empty($errors['password_confirm'])): ?>
+                        <label class="error-message"><?php echo implode('<br />', $errors['password_confirm']); ?></label>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="active"><?php echo __('Active'); ?></label>
+                    <div class="col-md-10">
+                        <input  checked="checked" class ='checkbox i-checks' type="checkbox" data-toggle="toggle" id="active" name="active" />
+                </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 control-label" for="locked"><?php echo __('Locked'); ?></label>
+                        <div class="col-md-10">
+                            <input <?php echo ($adminUser->locked ? 'checked="checked"' : ''); ?> type="checkbox" class ='checkbox i-checks' data-toggle="toggle" id="locked" name="locked" />
+                </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row col-sm-6 col-sm-offset-2">
+                                <button type="reset" class="btn btn-white" name="reset">Rest</button>
+                                <button type="button" class="btn btn-primary btn-save" name="save"><i class="fa fa-save"></i>Save</button>
+                            </div>
+                        </div>
+            </form>
+        </div>
+
+    </div>
+</div>

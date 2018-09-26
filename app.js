@@ -5,7 +5,7 @@ var multer = require('multer')
 var constants = require('constants');
 var constant = require('./config/constants');
 var createRoutes = require('./config/createRoutes');
-
+var i18n = require("i18n");
 
 var port = process.env.PORT || 8042;
 var mongoose = require('mongoose');
@@ -40,11 +40,17 @@ mongoose.connect(configDB.url, {
 
 
 require('./config/passport')(passport); // pass passport for configuration
-
+i18n.configure({
+    locales:['en', 'vn'],
+    directory: __dirname + '/locales',
+     defaultLocale: 'vn',
+});
+i18n.setLocale('vn');
 //set up our express application
 app.use(morgan('dev')); // log every request to the console
 app.use(cookieParser()); // read cookies (needed for auth)
-//app.use(bodyParser()); // get information from html forms
+// app.use(bodyParser()); // get information from html forms
+app.use(i18n.init);
 
 //view engine setup
 app.use(express.static(path.join(__dirname, 'public')));
@@ -67,6 +73,12 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 // routes ======================================================================
+createRoutes.setRoutes();
+console.log('testtt' + JSON.stringify(createRoutes.getResource()));
+app.locals = {
+    menuContent: menuContent,
+    routesLink: createRoutes.getResource(),
+}
 require('./config/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
 
@@ -75,18 +87,17 @@ app.listen(port);
 console.log('The magic happens on port ' + port);
 
 //variable global veiw
-createRoutes.setResource('ewrkuewyrkuy')
-app.locals = {
-    menuContent: menuContent,
-    tester:'ewurtwyiuryiwy',
-    createRoutes: createRoutes.getResource(),
-}
+// createRoutes.setResource({
+//     AdminUsers: ["index", "add", "edit", "delete"],
+//     home: ["signup", "login"],
+// });
+
 
 //catch 404 and forward to error handler
 app.use(function(req, res, next) {
     res.status(404).render('404', {
         title: "Sorry, page not found",
-        session: req.sessionbo
+        session: req.session
     });
 });
 

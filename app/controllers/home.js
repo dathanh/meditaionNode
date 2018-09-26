@@ -23,12 +23,12 @@ exports.loggedIn = function(req, res, next) {
 
 exports.home = function(req, res) {
     req.flash("success", "request thanh cong");
-    createRoutes.getFilename(
-        (filename)=>{
-            console.log(filename);
-        }
-    );
-    console.log(req.url);
+    // createRoutes.getFilename(
+    //     (filename)=>{
+    //         console.log(filename);
+    //     }
+    // );
+    // console.log(req.url);
     res.render('index.ejs', {
         title: 'Home page',
         error: req.flash("error"),

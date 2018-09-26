@@ -6,6 +6,7 @@ var constant = require('../../config/constants');
 var mongoose = require('mongoose');
 var AdminUsersTable = require("../models/AdminUsersTable");
 
+
 module.exports = {
     index: (req, res) => {
         AdminUsersTable.find({}).exec(function(err, result) {
@@ -21,5 +22,18 @@ module.exports = {
                 });
             }
         });
-    }
+    },
+    add: (req, res) => {
+        if (req.method == "POST") {
+            res.send('okkkkkk');
+        }
+        res.render('AdminUsers/add.ejs', {
+            title: 'addddddd',
+            error: req.flash("error"),
+            success: req.flash("success"),
+            csrfToken: req.csrfToken()
+        });
+
+    },
+
 }
