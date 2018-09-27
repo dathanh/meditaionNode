@@ -1,15 +1,18 @@
 var home = require('../app/controllers/home');
 var AdminUsers = require('../app/controllers/AdminUsers');
 var createRoutes = require('./createRoutes');
-var csrf = require('csurf')
+var csrf = require('csurf');
+var listRoutes = require('./listRoutes');
 //you can include all your controllers
-var csrfProtection = csrf({ cookie: true })
+var csrfProtection = csrf({
+    cookie: true
+});
 module.exports = function(app, passport) {
 
     app.get('/login', home.login);
     app.get('/signup', home.signup);
 
-    // app.get('/', home.loggedIn, home.home); //home
+    app.get('/', home.loggedIn, home.home); //home
     app.get('/home', home.loggedIn, home.home); //home
     app.get('/logout', home.logout);
     // app.get('/admin-users', AdminUsers.index);
@@ -26,6 +29,13 @@ module.exports = function(app, passport) {
         failureRedirect: '/login', // redirect back to the signup page if there is an error
         failureFlash: true // allow flash messages
     }));
-    app.use('/',csrfProtection, createRoutes.getRouter());
+    createRoutes.setResource(listRoutes.Controller);
+    createRoutes.setRoutes();
+    app.locals.routesLink = createRoutes.getResource();
+    app.use('/', csrfProtection, createRoutes.getRouter());
+    createRoutes.setResource(listRoutes.Api);
+    createRoutes.setRoutes('Api');
+    console.log(createRoutes.getResource());
+    app.use('/api/', createRoutes.getRouter());
 
 }

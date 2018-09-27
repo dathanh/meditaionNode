@@ -73,11 +73,10 @@ app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
 // routes ======================================================================
-createRoutes.setRoutes();
-console.log('testtt' + JSON.stringify(createRoutes.getResource()));
+
+// console.log('testtt' + JSON.stringify(createRoutes.getResource()));
 app.locals = {
     menuContent: menuContent,
-    routesLink: createRoutes.getResource(),
 }
 require('./config/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 

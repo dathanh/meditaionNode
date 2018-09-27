@@ -1,3 +1,11 @@
 {
-	"First name": "First name"
+	"First name": "First name",
+	"List Admin User": "List Admin User",
+	"Role": "Role",
+	"Last name": "Last name",
+	"Email": "Email",
+	"Password": "Password",
+	"Password confirm": "Password confirm",
+	"Active": "Active",
+	"Locked": "Locked"
 }
