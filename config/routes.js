@@ -29,13 +29,14 @@ module.exports = function(app, passport) {
         failureRedirect: '/login', // redirect back to the signup page if there is an error
         failureFlash: true // allow flash messages
     }));
+    createRoutes.setResource(listRoutes.Api);
+    createRoutes.setRoutes('api');
+    console.log(createRoutes.getResource());
+    app.use('/api/', createRoutes.getRouter());
     createRoutes.setResource(listRoutes.Controller);
     createRoutes.setRoutes();
     app.locals.routesLink = createRoutes.getResource();
     app.use('/', csrfProtection, createRoutes.getRouter());
-    createRoutes.setResource(listRoutes.Api);
-    createRoutes.setRoutes('Api');
-    console.log(createRoutes.getResource());
-    app.use('/api/', createRoutes.getRouter());
+
 
 }

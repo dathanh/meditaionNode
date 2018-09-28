@@ -8,8 +8,8 @@ var configAuth = require('./auth.js');
 var constant = require('../config/constants');
 var dateFormat = require('dateformat');
 var fs = require('fs');
-var validator = require('validator');
-var bcrypt = require('bcrypt-nodejs');
+
+// var bcrypt = require('bcrypt-nodejs');
 
 
 //expose this function to our app using module.exports

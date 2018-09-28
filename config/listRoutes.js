@@ -27,6 +27,14 @@ module.exports = {
                 method: ["get"],
                 routes: "",
             },
+            login: {
+                method: ["post", "get"],
+                routes: "",
+            },
+            upload: {
+                method: ["post"],
+                routes: "",
+            }
         }
     }
 }

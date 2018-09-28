@@ -4,34 +4,10 @@ var AdminUsers = require('../app/controllers/AdminUsers');
 // var home = require('../app/controllers/home');
 var Inflector = require('inflector-js');
 var resource = {};
-var getFilename = (filename = 'controllers') => {
-    var controllers = {};
-    const path = require('path');
-    const fs = require('fs');
-    //joining path of directory
-    const directoryPath = path.join(__dirname, `../app/${filename}`);
-    //passsing directoryPath and callback function
-    // fs.readdir(directoryPath, function(err, files) {
-    //     //handling error
-    //     if (err) {
-    //         return console.log('Unable to scan directory: ' + err);
-    //     }
-    //     //listing all files using forEach
-    //     files.forEach(function(file) {
-    //         controllers[file.replace('.js', '')] = require('../app/controllers/' + file.replace('.js', ''));
-    //         console.log(controllers[file.replace('.js', '')] );
-    //     });
-    //     return controllers;
-    // });
-    var file = fs.readdirSync(directoryPath);
-    file.forEach(function(file) {
-        controllers[file.replace('.js', '')] = require(`../app/${filename}/` + file.replace('.js', ''));
-    });
-    return controllers;
-};
+
 module.exports = {
-    setRoutes: () => {
-        fileControllers = getFilename();
+    setRoutes: (filename) => {
+        fileControllers = module.exports.getFilename(filename);
 
         for (var controller in resource) {
             if (resource.hasOwnProperty(controller)) {
@@ -67,14 +43,33 @@ module.exports = {
             }
         }
     },
-    getResource: () => {
-        return resource;
+    getResource: () => resource,
+    setResource: listRoutes => resource = listRoutes,
+    getRouter: () => router,
+    getFilename: (filename = 'controllers') => {
+        console.log(filename);
+        var controllers = {};
+        const path = require('path');
+        const fs = require('fs');
+        //joining path of directory
+        const directoryPath = path.join(__dirname, `../app/${filename}`);
+        //passsing directoryPath and callback function
+        // fs.readdir(directoryPath, function(err, files) {
+        //     //handling error
+        //     if (err) {
+        //         return console.log('Unable to scan directory: ' + err);
+        //     }
+        //     //listing all files using forEach
+        //     files.forEach(function(file) {
+        //         controllers[file.replace('.js', '')] = require('../app/controllers/' + file.replace('.js', ''));
+        //         console.log(controllers[file.replace('.js', '')] );
+        //     });
+        //     return controllers;
+        // });
+        var file = fs.readdirSync(directoryPath);
+        file.forEach(function(file) {
+            controllers[file.replace('.js', '')] = require(`../app/${filename}/` + file.replace('.js', ''));
+        });
+        return controllers;
     },
-    setResource: (listRoutes) => {
-        resource = listRoutes;
-    },
-    getRouter: () => {
-        return router;
-    },
-
 }
