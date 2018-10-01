@@ -24,6 +24,7 @@ module.exports = {
                     title: 'Home page',
                     error: req.flash("error"),
                     success: req.flash("success"),
+                    info: req.flash('info'),
                     listUsers: result,
                 });
             }

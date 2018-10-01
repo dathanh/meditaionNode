@@ -3,9 +3,38 @@ var router = express.Router();
 var AdminUsers = require('../app/controllers/AdminUsers');
 // var home = require('../app/controllers/home');
 var Inflector = require('inflector-js');
+var acl = require('acl');
+acl = new acl(new acl.memoryBackend());
+acl.allow([{
+    roles: 'admin',
+    allows: [{
+            resources: ['/admin-users', ],
+            permissions: '*'
+        },
+
+    ]
+}])
+acl.addUserRoles('dathanh', 'admin');
+
 var resource = {};
+var getUserId = () => 'dathanh';
+
 
 module.exports = {
+    checkAuthorize: (req, res, next) => {
+        acl.isAllowed(getUserId(), req.path, '*', function(err, resPermission) {
+            console.log(resPermission + "=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            if (resPermission) {
+                next()
+            } else {
+                info = req.flash('info', 'khong vao dc');
+                success = req.flash('success');
+                error = req.flash('error');
+                res.redirect('/home');
+            }
+        })
+
+    },
     setRoutes: (filename) => {
         fileControllers = module.exports.getFilename(filename);
 
@@ -17,8 +46,10 @@ module.exports = {
                         if (resource[controller][action].routes == "") {
                             resource[controller][action].routes = '/' + Inflector.dasherize(Inflector.underscore(controller)) + '/' + Inflector.dasherize(Inflector.underscore(action));
                         }
+                        if (fileControllers[controller].hasOwnProperty('index')) {
+                            router.get('/' + Inflector.dasherize(Inflector.underscore(controller)), module.exports.checkAuthorize, fileControllers[controller].index);
+                        }
 
-                        // router.get('/admin-users/index', AdminUsers[action]);
                         for (var method in resource[controller][action]['method']) {
                             if ((fileControllers[controller][action]) && controller != 'home') {
                                 switch (resource[controller][action]['method'][method]) {
@@ -33,7 +64,7 @@ module.exports = {
                                     case "put":
                                         break;
                                     case "get":
-                                        router.get(tmpAction.routes, fileControllers[controller][action]);
+                                        router.get(tmpAction.routes, module.exports.checkAuthorize, fileControllers[controller][action]);
                                         break
                                 }
                             }

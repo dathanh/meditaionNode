@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "Validator": "^1.0.5",
+    "acl": "^0.4.11",
     "async": "latest",
     "basic-auth-connect": "latest",
     "bcrypt-nodejs": "0.0.3",

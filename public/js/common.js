@@ -21,8 +21,8 @@ $(document).ready(function() {
         "hideMethod": "fadeOut"
     };
 
-    var message = $('#cake-message').val(),
-        typeMessage = $('#cake-message-type').val();
+    var message = $('#flash-message').val(),
+        typeMessage = $('#flash-message-type').val();
     if (message && typeMessage) {
         toastr[typeMessage](message);
     }

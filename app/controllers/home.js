@@ -22,7 +22,7 @@ exports.loggedIn = function(req, res, next) {
 }
 
 exports.home = function(req, res) {
-    req.flash("success", "request thanh cong");
+    // req.flash("success", "request thanh cong");
     // createRoutes.getFilename(
     //     (filename)=>{
     //         console.log(filename);
@@ -33,6 +33,7 @@ exports.home = function(req, res) {
         title: 'Home page',
         error: req.flash("error"),
         success: req.flash("success"),
+        info: req.flash("info"),
         session: req.session,
         routes: routes,
 
@@ -61,19 +62,19 @@ exports.signup = function(req, res) {
 
 exports.login = function(req, res) {
 
-
-
     if (req.session.user) {
-
+        req.flash('info', "success first")
         res.redirect('/home');
-
+        req.flash('info', "success yesss")
     } else {
-
+        req.flash('info', "info demo");
+        req.flash('success', "success demo");
+        req.flash('error', "errors demo");
         res.render('newLogin', {
-            error: req.flash("error rwutgi4rutyi"),
-            success: req.flash("success ewrgweygruwygruwgeu"),
-            session: req.session,
-            layout: false,
+            info: req.flash('info'),
+            success: req.flash('success'),
+            error: req.flash('error'),
+            layout: false
             // params: req.params(),
         });
 

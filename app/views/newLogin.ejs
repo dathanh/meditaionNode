@@ -36,13 +36,23 @@
             </form>
             <p class="m-t"> <small><%='Copyright Author &copy;'%></small> </p>
         </div>
+        <% if (info.length>0) { %>
+        <%- include('Flash/default') -%>
+        <% } %>
+        <% if (error.length>0 ) { %>
+        <%- include('Flash/error'); -%>
+        <% } %>
+        <% if (success.length>0) { %>
+        <%- include('Flash/success') -%>
+        <% } %>
+
     </div>
 
 
     <!-- Mainly scripts -->
-    <script src='jquery-2.1.1.js'></script>
-    <script src='bootstrap.min.js'></script>
-    <script src='plugins/toastr/toastr.min.js'></script>
+    <script src='/js/jquery-2.1.1.js'></script>
+    <script src='/js/bootstrap.min.js'></script>
+    <script src='/js/plugins/toastr/toastr.min.js'></script>
     <script>
         $(document).ready(function() {
             toastr.options = {
@@ -60,8 +70,8 @@
                 "showMethod": "fadeIn",
                 "hideMethod": "fadeOut"
             };
-            var message = $('#cake-message').val(),
-                typeMessage = $('#cake-message-type').val();
+            var message = $('#flash-message').val(),
+                typeMessage = $('#flash-message-type').val();
             if (message && typeMessage) {
                 toastr[typeMessage](message);
             }
