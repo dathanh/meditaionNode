@@ -8,7 +8,7 @@ acl = new acl(new acl.memoryBackend());
 acl.allow([{
     roles: 'admin',
     allows: [{
-            resources: ['/admin-users', ],
+            resources: ['/admin-users/edit','/admin-users/index','/admin-users' ],
             permissions: '*'
         },
 
@@ -30,7 +30,8 @@ module.exports = {
                 info = req.flash('info', 'khong vao dc');
                 success = req.flash('success');
                 error = req.flash('error');
-                res.redirect('/home');
+                // res.redirect('/home');
+next();
             }
         })
 

@@ -1,0 +1,94 @@
+<div class="ibox float-e-margins">
+    <div>
+        <h5><%= __('Admin User detail') %></h5>
+    </div>
+    <div class="ibox-content">
+        <table class="vertical-table table table-condensed table-striped">
+            <tr>
+                <th>
+                    <%= __('Id') %>
+                </th>
+                <td>
+                    <%= adminUser._id %>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <%= __('Email') %>
+                </th>
+                <td>
+                    <%= adminUser.email %>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <%= __('Name') %>
+                </th>
+                <td>
+                    <%= adminUser.name %>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <%= __('Last name') %>
+                </th>
+                <td>
+                    <%=  %>
+                </td>
+            </tr>
+
+            <tr>
+            <tr>
+                <th>
+                    <%= __('Active') %>
+                </th>
+                <td>
+                    <%= (adminUser.status) ? __('Yes') : __('No'); %>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <%= __('Locked') %>
+                </th>
+                <td>
+                    <%=(adminUser.lock) ?   __('Yes') : __('No'); %>
+                </td>
+            </tr>
+
+            <tr>
+                <th>
+                    <%= __('Created') %>
+                </th>
+                <td>
+                    <%= adminUser.created_date %>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <%= __('Modified') %>
+                </th>
+                <td>
+                    <%= adminUser.updated_date %>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <div class="container-fluid">
+                        <div class="row admin-btn-actions">
+
+                            <a href="/admin-users/index" class="btn btn-white" title="Back to users"><i class="fa fa-chevron-left"></i> Back</a>
+                            <a href="/admin-users/edit/<%= adminUser._id %>" class="btn btn-primary" title="Edit this user"><i class="fa fa-edit"></i> Edit</a>
+                            <form method="post" action="/admin-users/delete/<%= adminUser._id %>">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                <button type="submit" title="Delete this user" class="btn btn-danger" ><i class="fa fa-trash-o"></i> Delete</button>
+                            </form>
+
+
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

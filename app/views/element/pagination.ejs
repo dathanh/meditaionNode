@@ -1,0 +1,9 @@
+<ul class="pagination">
+    <li class="prev <%= (paginate.hasPreviousPages)?'':'disabled' %>"><a href="<%= paginate.href(true) %>"  onclick="<%= (paginate.hasPreviousPages)?'':'return false;' %>" >&lt; previous</a></li>
+    <%  pages.forEach((page)=>{  %>
+    <li class="<%= ( currentPage == page.number)?'active':'' %>"><a href="<%= page.url %>"> <%= page.number %> </a></li>
+    <% }); %>
+    <li class="next <%= (has_more)?'':'disabled' %>"><a rel="next" href="<%= paginate.href() %>" onclick="<%= (has_more)?'':'return false;' %>">next &gt;</a></li>
+</ul>
+<p>
+    <%= currentPage +' of '+ pageCount %></p>

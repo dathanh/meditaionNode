@@ -26,53 +26,41 @@
                 <div class="form-group ">
                     <label class="col-md-2 control-label" for="first_name"><%= __('First name'); %></label>
                     <div class="col-md-10">
-                        <input type="text" class="form-control" id="first_name" name="first_name" placeholder="<%= __('First name') %>" value="" />
+                        <input type="text" class="form-control" id="first_name" name="first_name" placeholder="<%= __('First name') %>" value="<%=(adminUser.first_name)?adminUser.first_name:'' %>" />
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label" for="last_name"><%= __('Last name'); %></label>
-                    <div class="col-md-10">
-                        <input type="text" class="form-control" id="last_name" name="last_name" placeholder="<%= __('Last name'); %>" value="" />
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label" for="email"><%= __('Email'); %></label>
-                    <div class="col-md-10">
-                        <input type="email" class="form-control" id="email" name="email" placeholder="<%= __('Email'); %>" value="" />
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-md-2 control-label" for="password"><%= __('Password'); %></label>
-                    <div class="col-md-10">
-                        <input autocomplete="off" type="password" class="form-control" id="password" name="password" placeholder="<%= __('Password'); %>"  />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label" for="password_confirm"><%= __('Password confirm'); %></label>
-                    <div class="col-md-10">
-                        <input autocomplete="off" type="password" class="form-control" id="password_confirm" name="password_confirm" placeholder="<%= __('Password confirm'); %>"  />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label" for="active"><%= __('Active'); %></label>
-                    <div class="col-md-10">
-                        <input  checked="checked" class ='checkbox i-checks' type="checkbox" data-toggle="toggle" id="active" name="active" />
-                </div>
-                    </div>
-
                     <div class="form-group">
-                        <label class="col-md-2 control-label" for="locked"><%= __('Locked'); %></label>
+                        <label class="col-md-2 control-label" for="name"><%= __('Name'); %></label>
                         <div class="col-md-10">
-                            <input  type="checkbox" class ='checkbox i-checks' data-toggle="toggle" id="locked" name="locked" />
-                </div>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="<%= __('Name'); %>" value="<%=(adminUser.name)?adminUser.name:'' %>" />
+                    </div>
                         </div>
                         <div class="form-group">
-                            <div class="row col-sm-6 col-sm-offset-2">
-                                <button type="reset" class="btn btn-white" name="reset">Rest</button>
-                                <button type="button" class="btn btn-primary btn-save" name="save"><i class="fa fa-save"></i>Save</button>
+                            <label class="col-md-2 control-label" for="email"><%= __('Email'); %></label>
+                            <div class="col-md-10">
+                                <input type="email" class="form-control" id="email" name="email" placeholder="<%= __('Email'); %>" value="<%=(adminUser.email)?adminUser.email:'' %>" />
+                    </div>
                             </div>
-                        </div>
+
+                            <div class="form-group">
+                                <label class="col-md-2 control-label" for="active"><%= __('Active'); %></label>
+                                <div class="col-md-10">
+                                    <input  checked="<%=(adminUser.status)?'checked':'' %>" class ='checkbox i-checks' type="checkbox" data-toggle="toggle" id="active" name="active" />
+                </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label" for="locked"><%= __('Locked'); %></label>
+                                    <div class="col-md-10">
+                                        <input  type="checkbox" class ='checkbox i-checks' data-toggle="toggle" id="locked" name="locked" />
+                </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row col-sm-6 col-sm-offset-2">
+                                            <button type="reset" class="btn btn-white" name="reset">Rest</button>
+                                            <button type="button" class="btn btn-primary btn-save" name="save"><i class="fa fa-save"></i>Save</button>
+                                        </div>
+                                    </div>
             </form>
         </div>
 

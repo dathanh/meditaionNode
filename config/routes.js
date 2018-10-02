@@ -2,7 +2,7 @@ var home = require('../app/controllers/home');
 var AdminUsers = require('../app/controllers/AdminUsers');
 var createRoutes = require('./createRoutes');
 var csrf = require('csurf');
-
+const paginate = require('express-paginate');
 var listRoutes = require('./listRoutes');
 //you can include all your controllers
 var csrfProtection = csrf({
@@ -11,6 +11,7 @@ var csrfProtection = csrf({
 
 
 module.exports = function(app, passport) {
+    app.use(paginate.middleware(5, 50));
 
     app.get('/login', home.login);
     app.get('/signup', home.signup);

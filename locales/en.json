@@ -7,5 +7,12 @@
 	"Password": "Password",
 	"Password confirm": "Password confirm",
 	"Active": "Active",
-	"Locked": "Locked"
+	"Locked": "Locked",
+	"Name": "Name",
+	"Admin User detail": "Admin User detail",
+	"Id": "Id",
+	"Yes": "Yes",
+	"No": "No",
+	"Created": "Created",
+	"Modified": "Modified"
 }

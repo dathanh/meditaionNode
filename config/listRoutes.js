@@ -5,19 +5,23 @@ module.exports = {
             __prefix: Inflector.dasherize(Inflector.underscore("AdminUsers")),
             index: {
                 method: ["get"],
-                routes: "",
+                routes: "/admin-users/index",
             },
             add: {
                 method: ["get", "post", "put"],
                 routes: "",
             },
             edit: {
-                method: ["post", "put"],
-                routes: "",
+                method: ["post", "put",'get'],
+                routes: "/admin-users/edit/:id",
+            },
+            view: {
+                method: ['get'],
+                routes: "/admin-users/view/:id",
             },
             delete: {
-                method: ["delete", "put"],
-                routes: "",
+                method: ["delete", "put","post"],
+                routes: "/admin-users/delete/:id",
             },
         },
     },

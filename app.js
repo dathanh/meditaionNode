@@ -41,9 +41,9 @@ mongoose.connect(configDB.url, {
 
 require('./config/passport')(passport); // pass passport for configuration
 i18n.configure({
-    locales:['en', 'vn'],
+    locales: ['en', 'vn'],
     directory: __dirname + '/locales',
-     defaultLocale: 'vn',
+    defaultLocale: 'vn',
 });
 i18n.setLocale('vn');
 //set up our express application

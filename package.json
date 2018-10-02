@@ -31,6 +31,7 @@
     "md5": "latest",
     "mime": "latest",
     "mongoose": "latest",
+    "mongoose-paginate": "^5.0.3",
     "morgan": "~1.6.1",
     "multer": "latest",
     "mysql": "latest",
