@@ -1,11 +1,11 @@
 <div class="ibox float-e-margins">
     <div>
-        <h5><%= __('Edit Admin Permission'); %></h5>
+        <h5><%= __('Edit Admin Role'); %></h5>
     </div>
     <div class="ibox-content">
         <div class="row">
             <div class="col-sm-4 m-b-xs">
-                <a class='btn btn-primary' escape href="routesLink.AdminPermissions.index.routes"><i class="glyphicon glyphicon-list-alt"></i> <%=  __('List Admin Permission') %> </a>
+                <a class='btn btn-primary' escape href="routesLink.AdminRoles.index.routes"><i class="glyphicon glyphicon-list-alt"></i> <%=  __('List Admin Role') %> </a>
             </div>
         </div>
 
@@ -15,7 +15,7 @@
                 <div class="form-group <%= (checkExist('name',errors)) ? 'has-error' : '' %>">
                     <label class="col-md-2 control-label" for="name"><%= __('name'); %></label>
                     <div class="col-md-10">
-                        <input type="text" class="form-control" id="name" name="name" placeholder="<%= __('name'); %>" value="<%=(adminPermission.name)?adminPermission.name:'' %>" />
+                        <input type="text" class="form-control" id="name" name="name" placeholder="<%= __('name'); %>" value="<%=(adminRole.name)?adminRole.name:'' %>" />
                         <% if (checkExist('name',errors)){  %>
                         <label class="error"><%= errors.name %></label>
                         <% } %>
@@ -24,7 +24,7 @@
                 <div class="form-group  <%= (checkExist('description',errors)) ? 'has-error' : '' %>">
                     <label class="col-md-2 control-label" for="description"><%= __('description'); %></label>
                     <div class="col-md-10">
-                        <input type="email" class="form-control" id="email" name="email" placeholder="<%= __('description'); %>" value="<%=(adminPermission.description)?adminPermission.description:'' %>" />
+                        <input type="email" class="form-control" id="email" name="email" placeholder="<%= __('description'); %>" value="<%=(adminRole.description)?adminRole.description:'' %>" />
                         <% if (checkExist('description',errors)){  %>
                         <label class="error"><%= errors.description %></label>
                         <% } %>
@@ -34,7 +34,7 @@
                 <div class="form-group  <%= (checkExist('status',errors)) ? 'has-error' : '' %>">
                     <label class="col-md-2 control-label" for="active"><%= __('Active'); %></label>
                     <div class="col-md-10">
-                        <input  checked="<%=(adminPermission.status)?'checked':'' %>" class ='checkbox i-checks' type="checkbox" data-toggle="toggle" id="status" name="status" />
+                        <input  checked="<%=(adminRole.status)?'checked':'' %>" class ='checkbox i-checks' type="checkbox" data-toggle="toggle" id="status" name="status" />
                         <% if (checkExist('status',errors)){  %>
                         <label class="error"><%= errors.status %></label>
                         <% } %>

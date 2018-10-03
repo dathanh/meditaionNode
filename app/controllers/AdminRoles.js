@@ -10,7 +10,7 @@ var AdminRolesTable = require("../models/AdminRolesTable");
 var Validator = require('Validator')
 const paginate = require('express-paginate');
 var rules = {
-    controller: 'required',
+    name: 'required',
     description: 'required',
     status: 'required',
 }
@@ -75,6 +75,7 @@ module.exports = {
                 ]).limit(1).exec((err, AdminRoleDB) => {
                     var v = Validator.make(req.body, rules);
                     if (v.fails()) {
+                        console.log(v.getErrors());
                         app.locals.pathVariable = {
                             errors: v.getErrors(),
                             path: req.path,
@@ -85,7 +86,7 @@ module.exports = {
                         var day = dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
                         AdminRole._id = (AdminRoleDB.hasOwnProperty('0')) ? AdminRoleDB[0]._id + 1 : 1;
                         AdminRole.name = req.body.name;
-                        AdminRole.description = req.body.description
+                        AdminRole.description = req.body.description;
                         AdminRole.status = (req.body.status) ? 'active' : 'inactive';
                         AdminRole.created_date = day;
                         AdminRole.updated_date = day;

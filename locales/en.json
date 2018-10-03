@@ -28,5 +28,9 @@
 	"Admin Permission detail": "Admin Permission detail",
 	"Add Admin Role": "Add Admin Role",
 	"List Admin Role": "List Admin Role",
-	"Description": "Description"
+	"Description": "Description",
+	"name": "name",
+	"Edit Admin Role": "Edit Admin Role",
+	"description": "description",
+	"Admin Role detail": "Admin Role detail"
 }
