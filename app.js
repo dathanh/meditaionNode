@@ -77,6 +77,9 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 // console.log('testtt' + JSON.stringify(createRoutes.getResource()));
 app.locals = {
     menuContent: menuContent,
+    checkExist: (prop, obj = {}) => {
+        return obj.hasOwnProperty(prop);
+    }
 }
 require('./config/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 

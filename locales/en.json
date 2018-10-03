@@ -14,5 +14,19 @@
 	"Yes": "Yes",
 	"No": "No",
 	"Created": "Created",
-	"Modified": "Modified"
+	"Modified": "Modified",
+	"Edit Admin User": "Edit Admin User",
+	"Add Admin User": "Add Admin User",
+	"A": "A",
+	"Add Admin Permission": "Add Admin Permission",
+	"List Admin Permission": "List Admin Permission",
+	"Controller": "Controller",
+	"Action": "Action",
+	"Edit Admin Permission": "Edit Admin Permission",
+	"controller": "controller",
+	"action": "action",
+	"Admin Permission detail": "Admin Permission detail",
+	"Add Admin Role": "Add Admin Role",
+	"List Admin Role": "List Admin Role",
+	"Description": "Description"
 }

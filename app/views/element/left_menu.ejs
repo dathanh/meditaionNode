@@ -37,14 +37,14 @@
                 <a href="">
                     <i class="fa fa-<%= menu.icon %>"></i>
                     <span class="nav-label"><%= menu.name %></span>
-                    <span class="label label-primary pull-right"><?= __('A') ?></span>
+                    <span class="label label-primary pull-right"><%=  __('A') %></span>
                 </a>
                 <ul class="nav nav-second-level">
                     <li>
-                        <a href="<%= routesLink.AdminUsers.index.routes %>"><%= menu.index.name %></a>
+                        <a href="<%= menu.index.link %>"><%= menu.index.name %></a>
                     </li>
                     <li>
-                        <a href="<%= routesLink.AdminUsers.add.routes %>"><%= menu.add.name %></a>
+                        <a href="<%= menu.add.link %>"><%= menu.add.name %></a>
                     </li>
                 </ul>
             </li>

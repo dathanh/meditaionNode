@@ -1,11 +1,11 @@
 <div class="ibox float-e-margins">
     <div>
-        <h5><%= __('Edit Admin User'); %></h5>
+        <h5><%= __('Edit Admin Permission'); %></h5>
     </div>
     <div class="ibox-content">
         <div class="row">
             <div class="col-sm-4 m-b-xs">
-                <a class='btn btn-primary' escape href="routesLink.AdminUsers.index.routes"><i class="glyphicon glyphicon-list-alt"></i> <%=  __('List Admin User') %> </a>
+                <a class='btn btn-primary' escape href="routesLink.AdminPermissions.index.routes"><i class="glyphicon glyphicon-list-alt"></i> <%=  __('List Admin Permission') %> </a>
             </div>
         </div>
 
@@ -24,21 +24,21 @@
                     </div>
                 </div>
 
-                <div class="form-group <%= (checkExist('name',errors)) ? 'has-error' : '' %>">
-                    <label class="col-md-2 control-label" for="name"><%= __('Name'); %></label>
+                <div class="form-group <%= (checkExist('controller',errors)) ? 'has-error' : '' %>">
+                    <label class="col-md-2 control-label" for="controller"><%= __('controller'); %></label>
                     <div class="col-md-10">
-                        <input type="text" class="form-control" id="name" name="name" placeholder="<%= __('Name'); %>" value="<%=(adminUser.name)?adminUser.name:'' %>" />
-                        <% if (checkExist('name',errors)){  %>
-                        <label class="error"><%= errors.name %></label>
+                        <input type="text" class="form-control" id="controller" name="controller" placeholder="<%= __('controller'); %>" value="<%=(adminPermission.controller)?adminPermission.controller:'' %>" />
+                        <% if (checkExist('controller',errors)){  %>
+                        <label class="error"><%= errors.controller %></label>
                         <% } %>
                     </div>
                 </div>
-                <div class="form-group  <%= (checkExist('email',errors)) ? 'has-error' : '' %>">
-                    <label class="col-md-2 control-label" for="email"><%= __('Email'); %></label>
+                <div class="form-group  <%= (checkExist('action',errors)) ? 'has-error' : '' %>">
+                    <label class="col-md-2 control-label" for="action"><%= __('action'); %></label>
                     <div class="col-md-10">
-                        <input type="email" class="form-control" id="email" name="email" placeholder="<%= __('Email'); %>" value="<%=(adminUser.email)?adminUser.email:'' %>" />
-                        <% if (checkExist('email',errors)){  %>
-                        <label class="error"><%= errors.email %></label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="<%= __('action'); %>" value="<%=(adminPermission.action)?adminPermission.action:'' %>" />
+                        <% if (checkExist('action',errors)){  %>
+                        <label class="error"><%= errors.action %></label>
                         <% } %>
                     </div>
                 </div>
@@ -46,19 +46,9 @@
                 <div class="form-group  <%= (checkExist('status',errors)) ? 'has-error' : '' %>">
                     <label class="col-md-2 control-label" for="active"><%= __('Active'); %></label>
                     <div class="col-md-10">
-                        <input  checked="<%=(adminUser.status)?'checked':'' %>" class ='checkbox i-checks' type="checkbox" data-toggle="toggle" id="status" name="status" />
+                        <input  checked="<%=(adminPermission.status)?'checked':'' %>" class ='checkbox i-checks' type="checkbox" data-toggle="toggle" id="status" name="status" />
                         <% if (checkExist('status',errors)){  %>
                         <label class="error"><%= errors.status %></label>
-                        <% } %>
-                    </div>
-                </div>
-
-                <div class="form-group <%= (checkExist('locked',errors)) ? 'has-error' : '' %>">
-                    <label class="col-md-2 control-label" for="locked"><%= __('Locked'); %></label>
-                    <div class="col-md-10">
-                        <input  type="checkbox" class ='checkbox i-checks' data-toggle="toggle" id="locked" name="locked" />
-                        <% if (checkExist('locked',errors)){  %>
-                        <label class="error"><%= errors.locked %></label>
                         <% } %>
                     </div>
                 </div>

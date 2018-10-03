@@ -24,6 +24,52 @@ module.exports = {
                 routes: "/admin-users/delete/:id",
             },
         },
+        AdminPermissions: {
+            __prefix: Inflector.dasherize(Inflector.underscore("AdminPermissions")),
+            index: {
+                method: ["get"],
+                routes: "/admin-permissions/index",
+            },
+            add: {
+                method: ["get", "post", "put"],
+                routes: "",
+            },
+            edit: {
+                method: ["post", "put",'get'],
+                routes: "/admin-permissions/edit/:id",
+            },
+            view: {
+                method: ['get'],
+                routes: "/admin-permissions/view/:id",
+            },
+            delete: {
+                method: ["delete", "put","post"],
+                routes: "/admin-permissions/delete/:id",
+            },
+        },
+        AdminRoles: {
+            __prefix: Inflector.dasherize(Inflector.underscore("AdminRoles")),
+            index: {
+                method: ["get"],
+                routes: "/admin-roles/index",
+            },
+            add: {
+                method: ["get", "post", "put"],
+                routes: "",
+            },
+            edit: {
+                method: ["post", "put",'get'],
+                routes: "/admin-roles/edit/:id",
+            },
+            view: {
+                method: ['get'],
+                routes: "/admin-roles/view/:id",
+            },
+            delete: {
+                method: ["delete", "put","post"],
+                routes: "/admin-roles/delete/:id",
+            },
+        },
     },
     Api: {
         AdminUsers: {

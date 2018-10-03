@@ -10,6 +10,7 @@ var adminUsersSchema = mongoose.Schema({
     email: String,
     password: String,
     status: String,
+    lock: String,
     created_date: Date,
     updated_date: Date,
     active_hash: String,

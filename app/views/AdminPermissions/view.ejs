@@ -1,6 +1,6 @@
 <div class="ibox float-e-margins">
     <div>
-        <h5><%= __('Admin User detail') %></h5>
+        <h5><%= __('Admin Permission detail') %></h5>
     </div>
     <div class="ibox-content">
         <table class="vertical-table table table-condensed table-striped">
@@ -9,31 +9,31 @@
                     <%= __('Id') %>
                 </th>
                 <td>
-                    <%= adminUser._id %>
+                    <%= adminPermission._id %>
                 </td>
             </tr>
             <tr>
                 <th>
-                    <%= __('Email') %>
+                    <%= __('Controller') %>
                 </th>
                 <td>
-                    <%= adminUser.email %>
+                    <%= adminPermission.controller %>
                 </td>
             </tr>
             <tr>
                 <th>
-                    <%= __('Name') %>
+                    <%= __('Action') %>
                 </th>
                 <td>
-                    <%= adminUser.name %>
+                    <%= adminPermission.action %>
                 </td>
             </tr>
             <tr>
                 <th>
-                    <%= __('Last name') %>
+                    <%= __('Role') %>
                 </th>
                 <td>
-                    <%=  %>
+                    <%= adminPermission.role_id  %>
                 </td>
             </tr>
 
@@ -43,24 +43,15 @@
                     <%= __('Active') %>
                 </th>
                 <td>
-                    <%= (adminUser.status) ? __('Yes') : __('No'); %>
+                    <%= (adminPermission.status) ? __('Yes') : __('No'); %>
                 </td>
             </tr>
-            <tr>
-                <th>
-                    <%= __('Locked') %>
-                </th>
-                <td>
-                    <%=(adminUser.lock) %>
-                </td>
-            </tr>
-
             <tr>
                 <th>
                     <%= __('Created') %>
                 </th>
                 <td>
-                    <%= adminUser.created_date %>
+                    <%= adminPermission.created_date %>
                 </td>
             </tr>
             <tr>
@@ -68,7 +59,7 @@
                     <%= __('Modified') %>
                 </th>
                 <td>
-                    <%= adminUser.updated_date %>
+                    <%= adminPermission.updated_date %>
                 </td>
             </tr>
             <tr>
@@ -77,12 +68,12 @@
                     <div class="container-fluid">
                         <div class="row admin-btn-actions">
 
-                            <a href="/admin-users/index" class="btn btn-white" title="Back to users"><i class="fa fa-chevron-left"></i> Back</a>
-                            <a href="/admin-users/edit/<%= adminUser._id %>" class="btn btn-primary" title="Edit this user"><i class="fa fa-edit"></i> Edit</a>
-                            <form method="post" style="display:none;" action="/admin-users/delete/<%= adminUser._id %>" id="postDelete_<%= adminUser._id %>">
+                            <a href="/admin-permissions/index" class="btn btn-white" title="Back to permissions"><i class="fa fa-chevron-left"></i> Back</a>
+                            <a href="/admin-permissions/edit/<%= adminPermission._id %>" class="btn btn-primary" title="Edit this permission"><i class="fa fa-edit"></i> Edit</a>
+                            <form method="post" style="display:none;" action="/admin-permissions/delete/<%= adminPermission._id %>" id="postDelete_<%= adminPermission._id %>">
                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             </form>
-                                <a class="btn btn-danger" onclick='if (confirm("Are you sure you want to delete # <%= adminUser._id %>?")) { document.getElementById("postDelete_<%= adminUser._id %>").submit(); } event.returnValue = false; return false;' href="#"><i class="fa fa-trash-o"></i>Delete</a>
+                                <a class="btn btn-danger" onclick='if (confirm("Are you sure you want to delete # <%= adminPermission._id %>?")) { document.getElementById("postDelete_<%= adminPermission._id %>").submit(); } event.returnValue = false; return false;' href="#"><i class="fa fa-trash-o"></i>Delete</a>
                         </div>
                     </div>
                 </td>

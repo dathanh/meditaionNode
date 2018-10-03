@@ -1,8 +1,9 @@
+var mongoose = require('mongoose');
+var bcrypt = require('bcrypt-nodejs');
 var adminRolesSchema = mongoose.Schema({
 	_id:{ type: Number, default: 1 },
 	name: String,
 	description: String,
-	password: String,
 	status: String,
 	created_date: Date,
 	updated_date: Date,

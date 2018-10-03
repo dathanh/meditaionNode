@@ -2,10 +2,10 @@ var Inflector = require('inflector-js')
 module.exports = [
     {
         name: 'AdminUsers',
-        icon: 'dimonds',
+        icon: 'users',
         index: {
             link: Inflector.dasherize(Inflector.underscore('AdminUsers'))+'/index',
-            name: 'List Admin Usres'
+            name: 'List Admin Usres',
         },
         add: {
             link: 'admin-users/add',
@@ -14,25 +14,25 @@ module.exports = [
     },
     {
         name: 'AdminPermissions',
-        icon: 'users',
+        icon: 'diamond',
         index: {
-            link: 'admin-users/index',
+            link: '/admin-permissions/index',
             name: 'List Admin Permissions'
         },
         add: {
-            link: 'admin-users/add',
+            link: '/admin-permissions/add',
             name: 'Add Admin Permission'
         }
     },
     {
         name: 'AdminRoles',
-        icon: 'users',
+        icon: 'flask',
         index: {
-            link: 'admin-roles/index',
+            link: '/admin-roles/index',
             name: 'List Admin Roles'
         },
         add: {
-            link: 'admin-roles/add',
+            link: '/admin-roles/add',
             name: 'Add Admin Roles'
         }
     }

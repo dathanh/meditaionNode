@@ -1,12 +1,12 @@
 <div class="ibox float-e-margins">
     <div>
-        <h5><%= 'List Admin User' %></h5>
+        <h5><%= 'List Admin Permission' %></h5>
 
     </div>
     <div class="ibox-content">
         <div class="row">
 
-            <form method="get" accept-charset="utf-8" name="filterForm" action="/admin-users/index">
+            <form method="get" accept-charset="utf-8" name="filterForm" action="/admin-permissions/index">
                 <div class="col-sm-4">
                     <div class="input-group">
                         <input type="text" placeholder="Search" name="title" value="" class="input-sm form-control">
@@ -19,7 +19,7 @@
 
 
             <div class="col-sm-4 m-b-xs">
-                <a href="/admin-users/add"  title="Add Admin Users" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i>"Add Admin Users</a>
+                <a href="/admin-permissions/add"  title="Add Admin Permissions" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i>"Add Admin Permissions</a>
             </div>
         </div>
         <div class="table-responsive">
@@ -27,10 +27,10 @@
                 <thead>
                     <tr>
                         <th><a href="<%= paginate.href({ order: (req.query.order == 1)? -1 : 1,sort:'_id' }) %>">id</a></th>
-                        <th><a href="<%= paginate.href({ order: (req.query.order == 1)? -1 : 1,sort:'email' }) %>">email</a></th>
-                        <th><a href="<%= paginate.href({ order: (req.query.order == 1)? -1 : 1,sort:'name' }) %>">name</a></th>
+                        <th><a href="<%= paginate.href({ order: (req.query.order == 1)? -1 : 1,sort:'controller' }) %>">controller</a></th>
+                        <th><a href="<%= paginate.href({ order: (req.query.order == 1)? -1 : 1,sort:'action' }) %>">action</a></th>
                         <th><a href="<%= paginate.href({ order: (req.query.order == 1)? -1 : 1,sort:'status' }) %>">status</a></th>
-                        <th><a href="<%= paginate.href({ order: (req.query.order == 1)? -1 : 1,sort:'lock' }) %>">lock</a></th>
+                        <th><a href="<%= paginate.href({ order: (req.query.order == 1)? -1 : 1,sort:'role_id' }) %>">Role</a></th>
                         <th><a href="<%= paginate.href({ order: (req.query.order == 1)? -1 : 1,sort:'updated_date' }) %>">Modified</a></th>
                         <th><a href="<%= paginate.href({ order: (req.query.order == 1)? -1 : 1,sort:'created_date' }) %>">Created</a>
                         <th class="actions">
@@ -39,36 +39,36 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <%  listUsers.forEach((user)=>{  %>
+                    <%  listPermissions.forEach((permission)=>{  %>
                     <tr>
                         <td>
-                            <%= user._id %>
+                            <%= permission._id %>
                         </td>
                         <td>
-                            <%= user.email %>
+                            <%= permission.controller %>
                         </td>
                         <td>
-                            <%= user.name %>
+                            <%= permission.action %>
                         </td>
                         <td>
-                            <%= user.status %>
+                            <%= permission.status %>
                         </td>
                         <td>
-                            <%= user.lock %>
+                            <%= permission.role_id %>
                         </td>
                         <td>
-                            <%= user.updated_date %>
+                            <%= permission.updated_date %>
                         </td>
                         <td>
-                            <%= user.created_date %>
+                            <%= permission.created_date %>
                         </td>
                         <td class="actions">
-                            <a class="btn btn-primary" href="/admin-users/view/<%= user._id %>"><i class="fa fa-eye"></i></a>
-                            <a class="btn btn-success" href="/admin-users/edit/<%= user._id %>"><i class="fa fa-edit"></i></a>
-                            <form method="post" style="display:none;" action="/admin-users/delete/<%= user._id %>" id="postDelete_<%= user._id %>">
+                            <a class="btn btn-primary" href="/admin-permissions/view/<%= permission._id %>"><i class="fa fa-eye"></i></a>
+                            <a class="btn btn-success" href="/admin-permissions/edit/<%= permission._id %>"><i class="fa fa-edit"></i></a>
+                            <form method="post" style="display:none;" action="/admin-permissions/delete/<%= permission._id %>" id="postDelete_<%= permission._id %>">
                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             </form>
-                                <a class="btn btn-danger" onclick='if (confirm("Are you sure you want to delete # 12?")) { document.getElementById("postDelete_<%= user._id %>").submit(); } event.returnValue = false; return false;' href="#"><i class="fa fa-trash-o"></i></a>
+                                <a class="btn btn-danger" onclick='if (confirm("Are you sure you want to delete # 12?")) { document.getElementById("postDelete_<%= permission._id %>").submit(); } event.returnValue = false; return false;' href="#"><i class="fa fa-trash-o"></i></a>
                         </td>
                     </tr>
                     <% }); %>
