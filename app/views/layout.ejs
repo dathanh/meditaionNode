@@ -34,7 +34,7 @@
                             <span class="m-r-sm text-muted welcome-message"><?= __('Welcome to Backend panel.') ?></span>
                         </li>
                         <li>
-                            <a href="/logout"><i class="fa fa-sign-out"></i> Log out</a>
+                            <a href="/admin/logout"><i class="fa fa-sign-out"></i> Log out</a>
                         </li>
                     </ul>
                 </nav>
@@ -59,6 +59,15 @@
                     <%= 'ewuryiw' %>
                 </div>
             </div>
+            <% if (info.length>0) { %>
+            <%- include('Flash/default') -%>
+            <% } %>
+            <% if (error.length>0 ) { %>
+            <%- include('Flash/error'); -%>
+            <% } %>
+            <% if (success.length>0) { %>
+            <%- include('Flash/success') -%>
+            <% } %>
         </div>
 
     </div>

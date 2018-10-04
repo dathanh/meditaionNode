@@ -9,6 +9,7 @@
     "basic-auth-connect": "latest",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "~1.13.2",
+    "camelcase": "^5.0.0",
     "client-sessions": "latest",
     "connect": "latest",
     "connect-flash": "latest",

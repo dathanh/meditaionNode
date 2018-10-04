@@ -1,14 +1,13 @@
 var Inflector = require('inflector-js')
-module.exports = [
-    {
+module.exports = [{
         name: 'AdminUsers',
         icon: 'users',
         index: {
-            link: Inflector.dasherize(Inflector.underscore('AdminUsers'))+'/index',
+            link: '/' + Inflector.dasherize(Inflector.underscore('AdminUsers')) + '/index',
             name: 'List Admin Usres',
         },
         add: {
-            link: 'admin-users/add',
+            link: '/admin-users/add',
             name: 'Add Admin Usres'
         }
     },

@@ -1,4 +1,4 @@
-var home = require('../app/controllers/home');
+
 var AdminUsers = require('../app/controllers/AdminUsers');
 var createRoutes = require('./createRoutes');
 var csrf = require('csurf');
@@ -13,25 +13,12 @@ var csrfProtection = csrf({
 module.exports = function(app, passport) {
     app.use(paginate.middleware(5, 50));
 
-    app.get('/login', home.login);
-    app.get('/signup', home.signup);
+    app.get('/admin/login', csrfProtection, AdminUsers.login);
+    app.get('/admin/logout', AdminUsers.logout);
 
-    app.get('/', home.loggedIn, home.home); //home
-    app.get('/home', home.loggedIn, home.home); //home
-    app.get('/logout', home.logout);
-    // app.get('/admin-users', AdminUsers.index);
-    // app.get('/admin-users/index', AdminUsers.index);
-
-    app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect: '/home', // redirect to the secure profile section
-        failureRedirect: '/signup', // redirect back to the signup page if there is an error
-        failureFlash: true // allow flash messages
-    }));
-
-    // process the login form
-    app.post('/login', passport.authenticate('local-login', {
-        successRedirect: '/home', // redirect to the secure profile section
-        failureRedirect: '/login', // redirect back to the signup page if there is an error
+    app.post('/admin/login', passport.authenticate('local-login', {
+        successRedirect: '/admin-users/index', // redirect to the secure profile section
+        failureRedirect: '/admin/login', // redirect back to the signup page if there is an error
         failureFlash: true // allow flash messages
     }));
     createRoutes.setResource(listRoutes.Api);
@@ -42,7 +29,13 @@ module.exports = function(app, passport) {
     createRoutes.setRoutes();
     app.locals.routesLink = createRoutes.getResource();
     console.log(createRoutes.getResource());
-    app.use('/', csrfProtection, createRoutes.getRouter());
+    app.use('/', (req, res, next) => {
+        if (req.session.user) {
+            next();
+        } else {
+            res.redirect('/admin/login');
+        }
+    }, csrfProtection, createRoutes.getRouter());
 
 
 }

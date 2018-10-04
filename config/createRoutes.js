@@ -3,39 +3,9 @@ var router = express.Router();
 var AdminUsers = require('../app/controllers/AdminUsers');
 // var home = require('../app/controllers/home');
 var Inflector = require('inflector-js');
-var acl = require('acl');
-acl = new acl(new acl.memoryBackend());
-acl.allow([{
-    roles: 'admin',
-    allows: [{
-            resources: ['/admin-users/edit','/admin-users/index','/admin-users' ],
-            permissions: '*'
-        },
-
-    ]
-}])
-acl.addUserRoles('dathanh', 'admin');
-
-var resource = {};
-var getUserId = () => 'dathanh';
-
+var permissionCheck = require('./permissions');
 
 module.exports = {
-    checkAuthorize: (req, res, next) => {
-        acl.isAllowed(getUserId(), req.path, '*', function(err, resPermission) {
-            console.log(resPermission + "=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-            if (resPermission) {
-                next()
-            } else {
-                info = req.flash('info', 'khong vao dc');
-                success = req.flash('success');
-                error = req.flash('error');
-                // res.redirect('/home');
-next();
-            }
-        })
-
-    },
     setRoutes: (filename) => {
         fileControllers = module.exports.getFilename(filename);
 
@@ -48,14 +18,14 @@ next();
                             resource[controller][action].routes = '/' + Inflector.dasherize(Inflector.underscore(controller)) + '/' + Inflector.dasherize(Inflector.underscore(action));
                         }
                         if (fileControllers[controller].hasOwnProperty('index')) {
-                            router.get('/' + Inflector.dasherize(Inflector.underscore(controller)), module.exports.checkAuthorize, fileControllers[controller].index);
+                            router.get('/' + Inflector.dasherize(Inflector.underscore(controller)), permissionCheck, fileControllers[controller].index);
                         }
 
                         for (var method in resource[controller][action]['method']) {
                             if ((fileControllers[controller][action]) && controller != 'home') {
                                 switch (resource[controller][action]['method'][method]) {
                                     case "post":
-                                        router.post(tmpAction.routes, fileControllers[controller][action]);
+                                        router.post(tmpAction.routes, permissionCheck, fileControllers[controller][action]);
                                         break;
                                     case "put":
                                         break;
@@ -65,7 +35,7 @@ next();
                                     case "put":
                                         break;
                                     case "get":
-                                        router.get(tmpAction.routes, module.exports.checkAuthorize, fileControllers[controller][action]);
+                                        router.get(tmpAction.routes, permissionCheck, fileControllers[controller][action]);
                                         break
                                 }
                             }

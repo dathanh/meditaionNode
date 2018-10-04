@@ -23,7 +23,8 @@
             <p>
                 <%='Enter your username and password to log in.'%>
             </p>
-            <form role="form" action="/login" role="form" method="post" class="login-form">
+            <form role="form" action="/admin/login" role="form" method="post" class="login-form">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <div class="form-group">
                     <label class="sr-only" for="form-username">Email</label>
                     <input type="text" name="email" required placeholder="Email..." class="form-username form-control" id="email">

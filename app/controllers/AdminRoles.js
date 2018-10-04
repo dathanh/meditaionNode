@@ -23,7 +23,7 @@ module.exports = {
             if (req.query.title) {
                 search = {
                     $or: [{
-                        email: new RegExp(req.query.title, "i"),
+                        description: new RegExp(req.query.title, "i"),
                     }, {
                         name: new RegExp(req.query.title, "i"),
                     }]
@@ -112,6 +112,7 @@ module.exports = {
                     error: req.flash("error"),
                     errors: app.locals.pathVariable.errors,
                     success: req.flash("success"),
+                    info: req.flash('info'),
                     csrfToken: req.csrfToken()
                 });
             }
@@ -157,6 +158,7 @@ module.exports = {
                                     title: 'addddddd',
                                     error: req.flash("error"),
                                     success: req.flash("success"),
+                                    info: req.flash('info'),
                                     errors: app.locals.pathVariable,
                                     csrfToken: req.csrfToken(),
                                     adminRole: result,
@@ -190,6 +192,7 @@ module.exports = {
                                     title: 'addddddd',
                                     error: req.flash("error"),
                                     success: req.flash("success"),
+                                    info: req.flash('info'),
                                     csrfToken: req.csrfToken(),
                                     adminRole: result
                                 });

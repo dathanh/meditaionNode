@@ -5,22 +5,25 @@
     <div class="ibox-content">
         <div class="row">
             <div class="col-sm-4 m-b-xs">
-                <a class='btn btn-primary' escape href="routesLink.AdminUsers.index.routes"><i class="glyphicon glyphicon-list-alt"></i> <%=  __('List Admin User') %> </a>
+                <a class='btn btn-primary' escape href="<%= routesLink.AdminUsers.index.routes %> "><i class="glyphicon glyphicon-list-alt"></i> <%=  __('List Admin User') %> </a>
             </div>
         </div>
 
         <div class="box-body">
             <form method="post" class='form-horizontal' novalidate='novalidate'>
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                <div class="form-group">
+                <div class="form-group <%= (checkExist('role_id',errors)) ? 'has-error' : '' %>">
                     <label class="col-md-2 control-label" for="admin_role_id"><%= __('Role'); %></label>
                     <div class="col-md-10">
-                        <select id="admin_role_id" name="admin_role_id" class="form-control select2">
-                            <option value="1">abc</option>
-                            <option value="2">xyz</option>
-                    </select>
-
-
+                        <select id="role_id" name="role_id" class="form-control select2">
+                            <option value="0">Select role</option>
+                            <% optionRole.forEach((role) => { %>
+                            <option <%= (adminUser.role_id == role._id)? 'selected=selected':'' %> value="<%= role._id %>"><%= role.name %></option>
+                            <% }); %>
+                        </select>
+                        <% if (checkExist('role_id',errors)){  %>
+                        <label class="error"><%= errors.role_id %></label>
+                        <% } %>
                     </div>
                 </div>
 

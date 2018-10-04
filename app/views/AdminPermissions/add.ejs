@@ -16,9 +16,11 @@
                     <label class="col-md-2 control-label" for="role_id"><%= __('Role'); %></label>
                     <div class="col-md-10">
                         <select id="role_id" name="role_id" class="form-control select2">
-                            <option value="1">abc</option>
-                            <option value="2">xyz</option>
-                    </select>
+                            <option value="0">Select role</option>
+                            <% optionRole.forEach((role) => { %>
+                            <option value="<%= role._id %>"><%= role.name %></option>
+                            <% }); %>
+                        </select>
                         <% if (checkExist('role_id',errors)){  %>
                         <label class="error"><%= errors.role_id %></label>
                         <% } %>
