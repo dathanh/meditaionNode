@@ -32,5 +32,9 @@
 	"name": "name",
 	"Edit Admin Role": "Edit Admin Role",
 	"description": "description",
-	"Admin Role detail": "Admin Role detail"
+	"Admin Role detail": "Admin Role detail",
+	"Add Article": "Add Article",
+	"List Article": "List Article",
+	"Title": "Title",
+	"Welcome to Backend panel.": "Welcome to Backend panel."
 }

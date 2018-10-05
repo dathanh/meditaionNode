@@ -8,9 +8,9 @@ var constant = require('../../config/constants');
 var mongoose = require('mongoose');
 var AdminPermissionsTable = require("../models/AdminPermissionsTable");
 var AdminRolesTable = require("../models/AdminRolesTable");
-var Validator = require('Validator')
+const Validator = require('Validator');
 const paginate = require('express-paginate');
-var rules = {
+const rules = {
     controller: 'required',
     action: 'required',
     status: 'required',
@@ -33,11 +33,11 @@ module.exports = {
                     }]
                 }
             }
-            console.log(search);
+
             if (req.query.sort) {
                 let filter = {}
                 filter[req.query.sort] = req.query.order;
-                console.log(filter);
+
                 var [results, itemCount, optionRole] = await Promise.all([
                     AdminPermissionsTable.find(search).limit(req.query.limit).sort(filter).skip(req.skip).lean().exec(),
                     AdminPermissionsTable.count(search),
@@ -93,7 +93,7 @@ module.exports = {
                             var day = dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
                             AdminPermission._id = (AdminPermissionDB.hasOwnProperty('0')) ? AdminPermissionDB[0]._id + 1 : 1;
                             AdminPermission.controller = req.body.controller;
-                            AdminPermission.action = req.body.action
+                            AdminPermission.action = req.body.action;
                             AdminPermission.status = (req.body.status) ? 'active' : 'inactive';
                             AdminPermission.role_id = req.body.role_id;
                             AdminPermission.created_date = day;
@@ -129,32 +129,47 @@ module.exports = {
 
             },
             edit: async (req, res) => {
+                    if (app.locals.pathVariable.path != req.path) {
+                        app.locals.pathVariable = '';
+                    }
                     var optionRole = await Promise.all([AdminRolesTable.find({}).lean().exec()]);
                     if (req.params.id.length > 0) {
                         if (app.locals.pathVariable.path != req.path) {
                             app.locals.pathVariable = '';
                         }
                         if (req.method == "POST") {
-                            var day = dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
-                            AdminPermissionsTable.findByIdAndUpdate(req.params.id, {
-                                $set: {
-                                    controller: req.body.controller,
-                                    action: req.body.action,
-                                    status: (req.body.status) ? 'active' : 'inactive',
-                                    role_id: req.body.role_id,
-                                    updated_date: day,
-                                }
-                            }, {
-                                new: true
-                            }, function(err, result) {
-                                if (err) {
-                                    throw err;
-                                    console.log("Error:", err);
-                                } else {
-                                    console.log('success');
-                                    res.redirect('/admin-permissions/index');
-                                }
-                            });
+                            var v = Validator.make(req.body, rules);
+                            if (v.fails()) {
+                                app.locals.pathVariable = {
+                                    errors: v.getErrors(),
+                                    path: req.path,
+                                };
+                                info = req.flash('info');
+                                success = req.flash('success');
+                                error = req.flash('error');
+                                res.redirect('back');
+                            } else {
+                                var day = dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
+                                AdminPermissionsTable.findByIdAndUpdate(req.params.id, {
+                                    $set: {
+                                        controller: req.body.controller,
+                                        action: req.body.action,
+                                        status: (req.body.status) ? 'active' : 'inactive',
+                                        role_id: req.body.role_id,
+                                        updated_date: day,
+                                    }
+                                }, {
+                                    new: true
+                                }, function(err, result) {
+                                    if (err) {
+                                        throw err;
+                                        console.log("Error:", err);
+                                    } else {
+                                        console.log('success');
+                                        res.redirect('/admin-permissions/index');
+                                    }
+                                });
+                            }
 
                         } else if (req.method == "GET") {
                             AdminPermissionsTable.findOne({
@@ -170,7 +185,7 @@ module.exports = {
                                             error: req.flash("error"),
                                             success: req.flash("success"),
                                             info: req.flash('info'),
-                                            errors: app.locals.pathVariable,
+                                            errors: app.locals.pathVariable.errors,
                                             csrfToken: req.csrfToken(),
                                             adminPermission: result,
                                             optionRole: optionRole[0],

@@ -6,8 +6,6 @@ acl = new acl(new acl.memoryBackend());
 var resource = [];
 var getUserId = () => 'dathanh';
 module.exports = async (req, res, next) => {
-    console.log(JSON.stringify(req.session.user));
-    console.log("--------------------Session" + req.session.user.role_id);
     var permissionRole = await AdminPermissionsTable.find({
         role_id: req.session.user.role_id
     }).lean().exec();

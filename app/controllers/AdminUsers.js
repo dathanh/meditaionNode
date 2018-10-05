@@ -12,9 +12,8 @@ const Validator = require('Validator');
 const paginate = require('express-paginate');
 var rules = {
     name: 'required',
-    password_confirm: 'required',
     email: 'required|email',
-    password: 'min:6|password',
+    password: 'min:6',
     role_id: 'integer',
 
 }
@@ -33,7 +32,7 @@ module.exports = {
                     }]
                 }
             }
-            console.log(search);
+
             if (req.query.sort) {
                 let filter = {}
                 filter[req.query.sort] = req.query.order;
@@ -74,7 +73,7 @@ module.exports = {
                     app.locals.pathVariable = '';
                 }
                 if (req.method == "POST") {
-                AdminUsersTable.find({}).sort([
+                    AdminUsersTable.find({}).sort([
                         ['_id', 'descending']
                     ]).limit(1).exec((err, adminUserDB) => {
                         function validateConfirmPassword(name, value, params) {
@@ -83,7 +82,7 @@ module.exports = {
                             }
                             return false;
                         }
-                        console.log(JSON.stringify(req.body));
+
                         var v = Validator.make(req.body, rules);
                         v.extend('password', validateConfirmPassword, "Password and confirm password were unequal")
                         if (v.fails()) {
@@ -101,7 +100,7 @@ module.exports = {
                         } else {
                             let adminUser = new AdminUsersTable();
                             var day = dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
-                            adminUser._id = adminUserDB[0]._id + 1;
+                            adminUser._id =(adminUserDB.hasOwnProperty('0')) ? AdminPermissionDB[0]._id + 1 : 1;
                             adminUser.name = req.body.name;
                             adminUser.email = req.body.email;
                             adminUser.role_id = req.body.role_id;
@@ -114,9 +113,7 @@ module.exports = {
                             adminUser.save(function(err, result) {
                                 if (err) {
                                     throw err;
-                                    console.log("Error:", err);
                                 } else {
-                                    console.log('success');
                                     res.redirect('/admin-users/index');
                                 }
 
@@ -148,46 +145,52 @@ module.exports = {
                             app.locals.pathVariable = '';
                         }
                         if (req.method == "POST") {
-                            var day = dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
-                            AdminUsersTable.findByIdAndUpdate(req.params.id, {
-                                $set: {
-                                    name: req.body.name,
-                                    // email: req.body.email,
-                                    role_id: req.body.role_id,
-                                    status: (req.body.status) ? 'active' : 'inactive',
-                                    lock: (req.body.locked) ? 'lock' : 'normal',
-                                    updated_date: day,
-                                }
-                            }, {
-                                new: true
-                            }, function(err, result) {
-                                if (err) {
-                                    throw err;
-                                    console.log("Error:", err);
-                                } else {
-                                    console.log('success');
-                                    res.redirect('/admin-users/index');
-                                }
-                            });
-
+                            var v = Validator.make(req.body, rules);
+                            if (v.fails()) {
+                                app.locals.pathVariable = {
+                                    errors: v.getErrors(),
+                                    path: req.path,
+                                };
+                                info = req.flash('info');
+                                success = req.flash('success');
+                                error = req.flash('error');
+                                res.redirect('back');
+                            } else {
+                                var day = dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
+                                AdminUsersTable.findByIdAndUpdate(req.params.id, {
+                                    $set: {
+                                        name: req.body.name,
+                                        role_id: req.body.role_id,
+                                        status: (req.body.status) ? 'active' : 'inactive',
+                                        lock: (req.body.locked) ? 'lock' : 'normal',
+                                        updated_date: day,
+                                    }
+                                }, {
+                                    new: true
+                                }, function(err, result) {
+                                    if (err) {
+                                        throw err;
+                                    } else {
+                                        res.redirect('/admin-users/index');
+                                    }
+                                });
+                            }
                         } else if (req.method == "GET") {
                             AdminUsersTable.findOne({
                                 _id: req.params.id
                             }).exec((err, result) => {
                                 if (err) {
                                     console.log("Error:", err);
-
                                 } else {
-                                    console.log(JSON.stringify(optionRole));
                                     if (result) {
                                         res.render('AdminUsers/edit.ejs', {
                                             title: 'addddddd',
                                             error: req.flash("error"),
                                             success: req.flash("success"),
-                                            errors: app.locals.pathVariable,
+                                            info: req.flash('info'),
+                                            errors: app.locals.pathVariable.errors,
                                             csrfToken: req.csrfToken(),
                                             adminUser: result,
-                                            info: req.flash('info'),
                                             optionRole: optionRole[0],
                                         });
                                     } else {
@@ -279,15 +282,14 @@ module.exports = {
                                 error: req.flash('error'),
                                 csrfToken: req.csrfToken(),
                                 layout: false,
-                                // params: req.params(),
                             });
 
                         }
 
                     },
                     logout: (req, res) => {
-                        req.logout();
                         req.session.destroy();
+                        req.logout();
                         res.redirect('/admin/login');
                     }
 

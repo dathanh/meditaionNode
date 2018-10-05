@@ -6,7 +6,7 @@ var constants = require('constants');
 var constant = require('./config/constants');
 var createRoutes = require('./config/createRoutes');
 var i18n = require("i18n");
-
+const fileUpload = require('express-fileupload');
 var port = process.env.PORT || 8042;
 var mongoose = require('mongoose');
 var passport = require('passport');
@@ -29,7 +29,9 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(expressLayouts);
-
+app.use(fileUpload({
+    createParentPath: true
+}));
 /***************Mongodb configuratrion********************/
 var mongoose = require('mongoose');
 var configDB = require('./config/database.js');

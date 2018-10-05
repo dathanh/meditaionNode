@@ -1,4 +1,3 @@
-
 var AdminUsers = require('../app/controllers/AdminUsers');
 var createRoutes = require('./createRoutes');
 var csrf = require('csurf');
@@ -8,7 +7,7 @@ var listRoutes = require('./listRoutes');
 var csrfProtection = csrf({
     cookie: true
 });
-
+const permission = require('./permissions2');
 
 module.exports = function(app, passport) {
     app.use(paginate.middleware(5, 50));
@@ -29,13 +28,6 @@ module.exports = function(app, passport) {
     createRoutes.setRoutes();
     app.locals.routesLink = createRoutes.getResource();
     console.log(createRoutes.getResource());
-    app.use('/', (req, res, next) => {
-        if (req.session.user) {
-            next();
-        } else {
-            res.redirect('/admin/login');
-        }
-    }, csrfProtection, createRoutes.getRouter());
-
+    app.use('/',permission.login,permission.checkPermissions() , csrfProtection, createRoutes.getRouter());
 
 }

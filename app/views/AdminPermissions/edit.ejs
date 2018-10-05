@@ -39,7 +39,7 @@
                 <div class="form-group  <%= (checkExist('action',errors)) ? 'has-error' : '' %>">
                     <label class="col-md-2 control-label" for="action"><%= __('action'); %></label>
                     <div class="col-md-10">
-                        <input type="email" class="form-control" id="email" name="email" placeholder="<%= __('action'); %>" value="<%=(adminPermission.action)?adminPermission.action:'' %>" />
+                        <input type="email" class="form-control" id="action" name="action" placeholder="<%= __('action'); %>" value="<%=(adminPermission.action)?adminPermission.action:'' %>" />
                         <% if (checkExist('action',errors)){  %>
                         <label class="error"><%= errors.action %></label>
                         <% } %>

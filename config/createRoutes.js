@@ -18,14 +18,14 @@ module.exports = {
                             resource[controller][action].routes = '/' + Inflector.dasherize(Inflector.underscore(controller)) + '/' + Inflector.dasherize(Inflector.underscore(action));
                         }
                         if (fileControllers[controller].hasOwnProperty('index')) {
-                            router.get('/' + Inflector.dasherize(Inflector.underscore(controller)), permissionCheck, fileControllers[controller].index);
+                            router.get('/' + Inflector.dasherize(Inflector.underscore(controller)), fileControllers[controller].index);
                         }
 
                         for (var method in resource[controller][action]['method']) {
                             if ((fileControllers[controller][action]) && controller != 'home') {
                                 switch (resource[controller][action]['method'][method]) {
                                     case "post":
-                                        router.post(tmpAction.routes, permissionCheck, fileControllers[controller][action]);
+                                        router.post(tmpAction.routes, fileControllers[controller][action]);
                                         break;
                                     case "put":
                                         break;
@@ -35,7 +35,7 @@ module.exports = {
                                     case "put":
                                         break;
                                     case "get":
-                                        router.get(tmpAction.routes, permissionCheck, fileControllers[controller][action]);
+                                        router.get(tmpAction.routes, fileControllers[controller][action]);
                                         break
                                 }
                             }

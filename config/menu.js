@@ -34,5 +34,17 @@ module.exports = [{
             link: '/admin-roles/add',
             name: 'Add Admin Roles'
         }
+    },
+    {
+        name: 'Articles',
+        icon: 'flask',
+        index: {
+            link: '/articles/index',
+            name: 'List Articles'
+        },
+        add: {
+            link: '/articles/add',
+            name: 'Add Articles'
+        }
     }
 ]

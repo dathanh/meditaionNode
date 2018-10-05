@@ -159,7 +159,7 @@ module.exports = {
                                     error: req.flash("error"),
                                     success: req.flash("success"),
                                     info: req.flash('info'),
-                                    errors: app.locals.pathVariable,
+                                    errors: app.locals.pathVariable.errors,
                                     csrfToken: req.csrfToken(),
                                     adminRole: result,
                                 });

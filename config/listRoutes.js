@@ -70,6 +70,29 @@ module.exports = {
                 routes: "/admin-roles/delete/:id",
             },
         },
+        Articles: {
+            __prefix: Inflector.dasherize(Inflector.underscore("Articles")),
+            index: {
+                method: ["get"],
+                routes: "/articles/index",
+            },
+            add: {
+                method: ["get", "post", "put"],
+                routes: "",
+            },
+            edit: {
+                method: ["post", "put",'get'],
+                routes: "/articles/edit/:id",
+            },
+            view: {
+                method: ['get'],
+                routes: "/articles/view/:id",
+            },
+            delete: {
+                method: ["delete", "put","post"],
+                routes: "/articles/delete/:id",
+            },
+        },
     },
     Api: {
         AdminUsers: {
