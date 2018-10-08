@@ -1,4 +1,5 @@
 var AdminUsers = require('../app/controllers/AdminUsers');
+var AdminUsersApi = require('../app/api/AdminUsers');
 var createRoutes = require('./createRoutes');
 var csrf = require('csurf');
 const paginate = require('express-paginate');
@@ -23,11 +24,12 @@ module.exports = function(app, passport) {
     createRoutes.setResource(listRoutes.Api);
     createRoutes.setRoutes('api');
     console.log(createRoutes.getResource());
-    app.use('/api/', createRoutes.getRouter());
+    app.post('/api/admin-users/login', AdminUsersApi.login);
+    app.use('/api/', AdminUsersApi.checkLogin, createRoutes.getRouter());
     createRoutes.setResource(listRoutes.Controller);
     createRoutes.setRoutes();
     app.locals.routesLink = createRoutes.getResource();
     console.log(createRoutes.getResource());
-    app.use('/',permission.login,permission.checkPermissions() , csrfProtection, createRoutes.getRouter());
+    app.use('/', permission.login, permission.checkPermissions(), csrfProtection, createRoutes.getRouter());
 
 }

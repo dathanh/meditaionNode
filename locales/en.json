@@ -36,5 +36,9 @@
 	"Add Article": "Add Article",
 	"List Article": "List Article",
 	"Title": "Title",
-	"Welcome to Backend panel.": "Welcome to Backend panel."
+	"Welcome to Backend panel.": "Welcome to Backend panel.",
+	"Edit Article": "Edit Article",
+	"Edit Articles": "Edit Articles",
+	"List Articles": "List Articles",
+	"Thumbnail": "Thumbnail"
 }

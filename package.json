@@ -6,6 +6,7 @@
     "Validator": "^1.0.5",
     "acl": "^0.4.11",
     "async": "latest",
+    "aws-sdk": "^2.329.0",
     "basic-auth-connect": "latest",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "~1.13.2",
@@ -30,6 +31,7 @@
     "http-proxy": "latest",
     "i18n": "^0.8.3",
     "inflector-js": "^1.0.1",
+    "is-empty": "^1.2.0",
     "jsonwebtoken": "^8.3.0",
     "md5": "latest",
     "mime": "latest",
@@ -50,7 +52,6 @@
     "serve-favicon": "~2.3.0",
     "simple-encryptor": "latest",
     "underscore": "latest",
-    "validate": "^4.5.1",
-    "validator": "^10.8.0"
+    "validate": "^4.5.1"
   }
 }

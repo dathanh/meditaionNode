@@ -90,12 +90,6 @@ require('./config/routes.js')(app, passport); // load our routes and pass in our
 app.listen(port);
 console.log('The magic happens on port ' + port);
 
-//variable global veiw
-// createRoutes.setResource({
-//     AdminUsers: ["index", "add", "edit", "delete"],
-//     home: ["signup", "login"],
-// });
-
 
 //catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -17,17 +17,17 @@ module.exports = {
     getUser: (req, res) => {
         var decoded = jsonwebtoken.verify(req.header('Authorization'), 'secretKey');
         res.send(decoded);
-        // AdminUsersTable.find({}).exec(function(err, result) {
-        //     if (err) {
-        //         console.log("Error:", err);
-        //     } else {
-        //         res.header("Access-Control-Allow-Origin", "http://localhost:8042"); //* will allow from all cross domain
-        //         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-        //         res.header("Access-Control-Allow-Methods", "GET");
-        //         res.send(result);
-        //         res.end();
-        //     }
-        // });
+        AdminUsersTable.find({}).exec((err, result) => {
+            if (err) {
+                console.log("Error:", err);
+            } else {
+                res.header("Access-Control-Allow-Origin", "http://localhost:8042"); //* will allow from all cross domain
+                res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+                res.header("Access-Control-Allow-Methods", "GET");
+                res.send(result);
+                res.end();
+            }
+        });
     },
     login: (req, res) => {
         if (req.method == "POST") {
@@ -59,9 +59,9 @@ module.exports = {
 
             });
         } else {
-            // res.header("Access-Control-Allow-Origin", "http://localhost:8042"); //* will allow from all cross domain
-            // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-            // res.header("Access-Control-Allow-Methods", "GET");
+            res.header("Access-Control-Allow-Origin", "http://localhost:8042"); //* will allow from all cross domain
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            res.header("Access-Control-Allow-Methods", "GET");
             res.send({
                 error: "Methods Invalid"
             });
@@ -76,7 +76,30 @@ module.exports = {
                 console.log(err);
             });
         }
+    },
+    checkLogin: (req, res, next) => {
+        if (req.header('Authorization')) {
+            try {
+                var dataUser = jsonwebtoken.verify(req.header('Authorization'), 'secretKey');
+                AdminUsersTable.findOne({
+                    email: dataUser.email
+                }).lean().exec((err, adminLogin) => {
+                    if (err) {
+                        res.end('Authorization Invalid');
+                    } else {
+                        next();
+                    }
+                })
+            } catch (err) {
+                res.end('Authorization Invalid');
+            }
+
+        } else {
+            res.end('Authorization Invalid');
+        }
+
     }
+
 
 
 }

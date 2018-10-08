@@ -9,15 +9,7 @@
                     <%= __('Id') %>
                 </th>
                 <td>
-                    <%= adminUser._id %>
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <%= __('Email') %>
-                </th>
-                <td>
-                    <%= adminUser.email %>
+                    <%= article._id %>
                 </td>
             </tr>
             <tr>
@@ -25,15 +17,31 @@
                     <%= __('Name') %>
                 </th>
                 <td>
-                    <%= adminUser.name %>
+                    <%= article.name %>
                 </td>
             </tr>
             <tr>
                 <th>
-                    <%= __('Role') %>
+                    <%= __('Title') %>
                 </th>
                 <td>
-                    <%= optionRole[adminUser.role_id-1].name  %>
+                    <%= article.title %>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <%= __('Description') %>
+                </th>
+                <td>
+                    <%= article.description %>
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    <%= __('Thumbnail') %>
+                </th>
+                <td>
+                    <img src="<%= article.thumbnail %>" alt="<%= article.name %>"/>
                 </td>
             </tr>
 
@@ -43,24 +51,15 @@
                     <%= __('Active') %>
                 </th>
                 <td>
-                    <%= (adminUser.status) ? __('Yes') : __('No'); %>
+                    <%= (article.status) ? __('Yes') : __('No'); %>
                 </td>
             </tr>
-            <tr>
-                <th>
-                    <%= __('Locked') %>
-                </th>
-                <td>
-                    <%=(adminUser.lock) %>
-                </td>
-            </tr>
-
             <tr>
                 <th>
                     <%= __('Created') %>
                 </th>
                 <td>
-                    <%= adminUser.created_date %>
+                    <%= article.created_date %>
                 </td>
             </tr>
             <tr>
@@ -68,7 +67,7 @@
                     <%= __('Modified') %>
                 </th>
                 <td>
-                    <%= adminUser.updated_date %>
+                    <%= article.updated_date %>
                 </td>
             </tr>
             <tr>
@@ -78,11 +77,11 @@
                         <div class="row admin-btn-actions">
 
                             <a href="/admin-users/index" class="btn btn-white" title="Back to users"><i class="fa fa-chevron-left"></i> Back</a>
-                            <a href="/admin-users/edit/<%= adminUser._id %>" class="btn btn-primary" title="Edit this user"><i class="fa fa-edit"></i> Edit</a>
-                            <form method="post" style="display:none;" action="/admin-users/delete/<%= adminUser._id %>" id="postDelete_<%= adminUser._id %>">
+                            <a href="/admin-users/edit/<%= article._id %>" class="btn btn-primary" title="Edit this user"><i class="fa fa-edit"></i> Edit</a>
+                            <form method="post" style="display:none;" action="/admin-users/delete/<%= article._id %>" id="postDelete_<%= article._id %>">
                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             </form>
-                                <a class="btn btn-danger" onclick='if (confirm("Are you sure you want to delete # <%= adminUser._id %>?")) { document.getElementById("postDelete_<%= adminUser._id %>").submit(); } event.returnValue = false; return false;' href="#"><i class="fa fa-trash-o"></i>Delete</a>
+                                <a class="btn btn-danger" onclick='if (confirm("Are you sure you want to delete # <%= article._id %>?")) { document.getElementById("postDelete_<%= article._id %>").submit(); } event.returnValue = false; return false;' href="#"><i class="fa fa-trash-o"></i>Delete</a>
                         </div>
                     </div>
                 </td>

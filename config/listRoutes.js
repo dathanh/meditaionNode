@@ -12,7 +12,7 @@ module.exports = {
                 routes: "",
             },
             edit: {
-                method: ["post", "put",'get'],
+                method: ["post", "put", 'get'],
                 routes: "/admin-users/edit/:id",
             },
             view: {
@@ -20,7 +20,7 @@ module.exports = {
                 routes: "/admin-users/view/:id",
             },
             delete: {
-                method: ["delete", "put","post"],
+                method: ["delete", "put", "post"],
                 routes: "/admin-users/delete/:id",
             },
         },
@@ -35,7 +35,7 @@ module.exports = {
                 routes: "",
             },
             edit: {
-                method: ["post", "put",'get'],
+                method: ["post", "put", 'get'],
                 routes: "/admin-permissions/edit/:id",
             },
             view: {
@@ -43,7 +43,7 @@ module.exports = {
                 routes: "/admin-permissions/view/:id",
             },
             delete: {
-                method: ["delete", "put","post"],
+                method: ["delete", "put", "post"],
                 routes: "/admin-permissions/delete/:id",
             },
         },
@@ -58,7 +58,7 @@ module.exports = {
                 routes: "",
             },
             edit: {
-                method: ["post", "put",'get'],
+                method: ["post", "put", 'get'],
                 routes: "/admin-roles/edit/:id",
             },
             view: {
@@ -66,7 +66,7 @@ module.exports = {
                 routes: "/admin-roles/view/:id",
             },
             delete: {
-                method: ["delete", "put","post"],
+                method: ["delete", "put", "post"],
                 routes: "/admin-roles/delete/:id",
             },
         },
@@ -81,7 +81,7 @@ module.exports = {
                 routes: "",
             },
             edit: {
-                method: ["post", "put",'get'],
+                method: ["post", "put", 'get'],
                 routes: "/articles/edit/:id",
             },
             view: {
@@ -89,7 +89,7 @@ module.exports = {
                 routes: "/articles/view/:id",
             },
             delete: {
-                method: ["delete", "put","post"],
+                method: ["delete", "put", "post"],
                 routes: "/articles/delete/:id",
             },
         },
@@ -108,6 +108,12 @@ module.exports = {
                 method: ["post"],
                 routes: "",
             }
+        },
+        Articles: {
+            getArticles: {
+                method: ["get"],
+                routes: "/articles/getArticles/",
+            },
         }
     }
 }

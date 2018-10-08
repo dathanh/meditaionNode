@@ -9,14 +9,17 @@ var mongoose = require('mongoose');
 var ArticlesTable = require("../models/ArticlesTable");
 const Validator = require('Validator');
 const paginate = require('express-paginate');
-
+const empty = require('is-empty');
+const path = require('path');
 var rules = {
     name: 'required',
     title: 'required',
     description: 'min:6',
-    thumbnail: 'min:6',
+    thumbnail: 'emptythumbnail',
     status: 'required',
-    flag: 'required'
+
+}
+var uploadThumbnail = (req, res) => {
 
 }
 app.locals.pathVariable = {
@@ -60,7 +63,7 @@ module.exports = {
                 error: req.flash("error"),
                 success: req.flash("success"),
                 info: req.flash('info'),
-                listUsers: results,
+                listArticles: results,
                 pageCount,
                 itemCount,
                 currentPage: req.query.page,
@@ -77,8 +80,13 @@ module.exports = {
                     ArticlesTable.find({}).sort([
                         ['_id', 'descending']
                     ]).limit(1).exec((err, articleDB) => {
+                        var requireThumbnail = (name, value, params) => {
+                            return (!empty(req.files.thumbnail));
+                        }
                         var v = Validator.make(req.body, rules);
+                        v.extend('emptythumbnail', requireThumbnail, "Thumbnail is required");
                         if (v.fails()) {
+                            console.log(v.getErrors());
                             app.locals.pathVariable = {
                                 errors: v.getErrors(),
                                 path: req.path,
@@ -86,37 +94,42 @@ module.exports = {
                             info = req.flash('info');
                             success = req.flash('success');
                             error = req.flash('error');
-                            let thumbnail = req.files.thumbnail;
-                            const path = require('path');
-                            //joining path of directory
-                            const directoryPath = path.join(__dirname, `../../public/upload/file/${ req.files.thumbnail.name}`);
 
-                            thumbnail.mv(directoryPath, function(err) {
-                                if (err)
-                                    return res.status(500).send(err);
-
-                                res.send('File uploaded!');
-                            });
-                            // res.redirect('/articles/add');
+                            res.redirect('/articles/add');
                         } else {
                             let article = new ArticlesTable();
                             var day = dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
-                            article._id = (articleDB.hasOwnProperty('0')) ? AdminPermissionDB[0]._id + 1 : 1;
-                            article.name = req.body.name;
-                            article.email = req.body.email;
-                            article.status = (req.body.status) ? 'active' : 'inactive';
-                            article.lock = (req.body.lock) ? 'lock' : 'normal';
-                            article.created_date = day;
-                            article.updated_date = day;
-
-                            article.save(function(err, result) {
+                            let thumbnail = req.files.thumbnail;
+                            var thumbnailPath = `/upload/image/${req.files.thumbnail.name}`;
+                            const directoryPath = path.join(__dirname, `../../public/upload/image/${req.files.thumbnail.name}`);
+                            thumbnail.mv(directoryPath, function(err) {
                                 if (err) {
-                                    throw err;
-                                } else {
-                                    res.redirect('/articles/index');
-                                }
+                                    app.locals.pathVariable.errors = {
+                                        thumbnail: "upload thumbnail error"
+                                    };
 
+                                } else {
+                                    article._id = (articleDB.hasOwnProperty('0')) ? articleDB[0]._id + 1 : 1;
+
+                                    article.name = req.body.name;
+                                    article.title = req.body.title;
+                                    article.description = req.body.description;
+                                    article.thumbnail = thumbnailPath;
+                                    article.status = (req.body.status) ? 'active' : 'inactive';
+                                    article.created_date = day;
+                                    article.updated_date = day;
+                                    article.save(function(err, result) {
+                                        if (err) {
+                                            throw err;
+                                        } else {
+                                            res.redirect('/articles/index');
+                                        }
+
+                                    });
+                                }
                             });
+
+
                         }
 
                     });
@@ -141,7 +154,11 @@ module.exports = {
                             app.locals.pathVariable = '';
                         }
                         if (req.method == "POST") {
+                            let requireThumbnail = (name, value, params) => {
+                                return (!empty(req.files.thumbnail));
+                            }
                             var v = Validator.make(req.body, rules);
+                            v.extend('emptythumbnail', requireThumbnail, "Thumbnail is required");
                             if (v.fails()) {
                                 app.locals.pathVariable = {
                                     errors: v.getErrors(),
@@ -153,23 +170,37 @@ module.exports = {
                                 res.redirect('back');
                             } else {
                                 var day = dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
-                                ArticlesTable.findByIdAndUpdate(req.params.id, {
-                                    $set: {
-                                        name: req.body.name,
-                                        role_id: req.body.role_id,
-                                        status: (req.body.status) ? 'active' : 'inactive',
-                                        lock: (req.body.locked) ? 'lock' : 'normal',
-                                        updated_date: day,
-                                    }
-                                }, {
-                                    new: true
-                                }, function(err, result) {
+                                let thumbnail = req.files.thumbnail;
+                                //joining path of directory
+                                const directoryPath = path.join(__dirname, `../../public/upload/image/${ req.files.thumbnail.name}`);
+                                thumbnail.mv(directoryPath, function(err) {
                                     if (err) {
-                                        throw err;
+                                        app.locals.pathVariable.errors = {
+                                            thumbnail: "upload thumbnail error"
+                                        };
+
                                     } else {
-                                        res.redirect('/articles/index');
+                                        ArticlesTable.findByIdAndUpdate(req.params.id, {
+                                            $set: {
+                                                name: req.body.name,
+                                                title: req.body.title,
+                                                description: req.body.description,
+                                                thumbnail: `/upload/image/${ req.files.thumbnail.name}`,
+                                                status: (req.body.status) ? 'active' : 'inactive',
+                                                updated_date: day,
+                                            }
+                                        }, {
+                                            new: true
+                                        }, function(err, result) {
+                                            if (err) {
+                                                throw err;
+                                            } else {
+                                                res.redirect('/articles/index');
+                                            }
+                                        });
                                     }
                                 });
+
                             }
                         } else if (req.method == "GET") {
                             ArticlesTable.findOne({
