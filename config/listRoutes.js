@@ -112,7 +112,15 @@ module.exports = {
         Articles: {
             getArticles: {
                 method: ["get"],
-                routes: "/articles/getArticles/",
+                routes: "/articles/all",
+            },
+            detailArticles: {
+                method: ["get"],
+                routes: "/articles/:id",
+            },
+            addArticles: {
+                method: ["post"],
+                routes: "/articles/add",
             },
         }
     }

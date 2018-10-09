@@ -9,4 +9,7 @@ module.exports = {
     "smtp_from_name": "express-mvc-generator",
     "alert_email": "aler@email.com",
     "alert_email_name": "Aler Name",
+    "region": 'us-east-2',
+    "userpool_id": 'us-east-2_4bvR0oGQq',
+    "app_client_id": '7tpjolv03m7o5buan8q1d9g6ra'
 };

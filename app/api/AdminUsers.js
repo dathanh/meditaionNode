@@ -48,6 +48,9 @@ module.exports = {
                                 expiresIn: 86400 // expires in 24 hours
                             });
                             res.send({
+                                _id: adminUser[0]._id,
+                                name: adminUser[0].name,
+                                email: adminUser[0].email,
                                 token: test
                             });
                         }

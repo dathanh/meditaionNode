@@ -5,6 +5,8 @@
   "dependencies": {
     "Validator": "^1.0.5",
     "acl": "^0.4.11",
+    "amazon-cognito-auth-js": "^1.2.4",
+    "amazon-cognito-identity-js": "^3.0.2",
     "async": "latest",
     "aws-sdk": "^2.329.0",
     "basic-auth-connect": "latest",
@@ -41,6 +43,8 @@
     "multer": "latest",
     "mysql": "latest",
     "node-constants": "latest",
+    "node-fetch": "^2.2.0",
+    "node-jose": "^1.0.0",
     "nodemailer": "^2.4.1",
     "nodemailer-smtp-transport": "^2.5.0",
     "nodemon": "latest",
