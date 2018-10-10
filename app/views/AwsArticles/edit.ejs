@@ -1,0 +1,74 @@
+<div class="ibox float-e-margins">
+    <div>
+        <h5><%= __('Edit Articles'); %></h5>
+    </div>
+    <div class="ibox-content">
+        <div class="row">
+            <div class="col-sm-4 m-b-xs">
+                <a class='btn btn-primary' escape href="<%= routesLink.Articles.index.routes %> "><i class="glyphicon glyphicon-list-alt"></i> <%=  __('List Articles') %> </a>
+            </div>
+        </div>
+
+        <div class="box-body">
+            <form method="post" class='form-horizontal' enctype=multipart/form-data novalidate='novalidate'>
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <div class="form-group  <%= (checkExist('name',errors)) ? 'has-error' : '' %>">
+                    <label class="col-md-2 control-label" for="name"><%= __('Name'); %><span class="text-danger">(*)</span></label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" id="name" required="required" name="name" placeholder="<%= __('Name'); %>"  value="<%=(article.name)?article.name:'' %>"/>
+                        <% if (checkExist('name',errors)){  %>
+                        <label class="error"><%= errors.name %></label>
+                        <% } %>
+                    </div>
+                </div>
+                <div class="form-group  <%= (checkExist('title',errors)) ? 'has-error' : '' %>">
+                    <label class="col-md-2 control-label" for="title"><%= __('Title'); %><span class="text-danger">(*)</span></label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" id="title" required="required" name="title" placeholder="<%= __('Title'); %>" value="<%=(article.name)?article.title:'' %>" />
+                        <% if (checkExist('title',errors)){  %>
+                        <label class="error"><%= errors.title %></label>
+                        <% } %>
+                    </div>
+                </div>
+                <div class="form-group  <%= (checkExist('description',errors)) ? 'has-error' : '' %>">
+                    <label class="col-md-2 control-label" for="description"><%= __('Description'); %><span class="text-danger">(*)</span></label>
+                    <div class="col-md-10">
+                        <input type="text" class="form-control" id="description" required="required" name="description" placeholder="<%= __('Description'); %>" value="<%=(article.name)?article.description:'' %>" />
+                        <% if (checkExist('description',errors)){  %>
+                        <label class="error"><%= errors.description %></label>
+                        <% } %>
+                    </div>
+                </div>
+                <div class="form-group  <%= (checkExist('status',errors)) ? 'has-error' : '' %>">
+                    <label class="col-md-2 control-label" for="active"><%= __('Active'); %></label>
+                    <div class="col-md-10">
+                        <input  checked="checked" class ='checkbox i-checks' type="checkbox" data-toggle="toggle" id="active" name="status" />
+                        <% if (checkExist('status',errors)){  %>
+                        <label class="error"><%= errors.status %></label>
+                        <% } %>
+                    </div>
+                </div>
+                <% if (article.thumbnail){  %>
+                <div class='form-group'>
+                    <label id="PicThumbnailLabel" class="col-sm-2 control-label" for="">Thumbnail</label>
+                    <img src="<%=(article.thumbnail)?article.thumbnail:'' %>" width="200" class="col-sm-10" style="width:128px" alt=""/>
+                </div>
+                <% } %>
+                <div class="form-group  <%= (checkExist('thumbnail',errors)) ? 'has-error' : '' %>">
+                    <label class="col-sm-2 control-label"><label for="thumbnail">Thumbnail <span class="text-danger">(*)</span></label></label>
+                    <div class="col-sm-10"><input type="file" name="thumbnail" accept="image/x-png, image/gif, image/jpeg , image/jpg" id="thumbnail"></div>
+                        <% if (checkExist('thumbnail',errors)){  %>
+                        <label class="error"><%= errors.thumbnail %></label>
+                        <% } %>
+                </div>
+                <div class="form-group">
+                    <div class="row col-sm-6 col-sm-offset-2">
+                        <button type="reset" class="btn btn-white" name="reset">Rest</button>
+                        <button type="button" class="btn btn-primary btn-save" name="save"><i class="fa fa-save"></i>Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>

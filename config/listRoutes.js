@@ -93,6 +93,25 @@ module.exports = {
                 routes: "/articles/delete/:id",
             },
         },
+        AwsArticles: {
+            __prefix: Inflector.dasherize(Inflector.underscore("AwsArticles")),
+            index: {
+                method: ["get"],
+                routes: "/aws-articles/index",
+            },
+            view: {
+                method: ["get"],
+                routes: "/aws-articles/view/:id",
+            },
+            add: {
+                method: ["get", "post", "put"],
+                routes: "/aws-articles/add",
+            },
+            edit: {
+                method: ["get", "post", "put"],
+                routes: "/aws-articles/edit/:id",
+            },
+        },
     },
     Api: {
         AdminUsers: {
@@ -112,15 +131,15 @@ module.exports = {
         Articles: {
             getArticles: {
                 method: ["get"],
-                routes: "/articles/all",
+                routes: "/api/articles/all",
             },
             detailArticles: {
                 method: ["get"],
-                routes: "/articles/:id",
+                routes: "/api/articles/:id",
             },
             addArticles: {
                 method: ["post"],
-                routes: "/articles/add",
+                routes: "/api/articles/add",
             },
         }
     }

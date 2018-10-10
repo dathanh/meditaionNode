@@ -46,5 +46,16 @@ module.exports = [{
             link: '/articles/add',
             name: 'Add Articles'
         }
+    }, {
+        name: 'AwsArticles',
+        icon: 'flask',
+        index: {
+            link: '/aws-articles/index',
+            name: 'List Aws Articles'
+        },
+        add: {
+            link: '/aws-articles/add',
+            name: 'Add Aws Articles'
+        }
     }
 ]

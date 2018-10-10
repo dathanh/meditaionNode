@@ -76,8 +76,8 @@
                     <div class="container-fluid">
                         <div class="row admin-btn-actions">
 
-                            <a href="/article/index" class="btn btn-white" title="Back to users"><i class="fa fa-chevron-left"></i> Back</a>
-                            <a href="/article/edit/<%= article._id %>" class="btn btn-primary" title="Edit this user"><i class="fa fa-edit"></i> Edit</a>
+                            <a href="/aws-articles/index" class="btn btn-white" title="Back to users"><i class="fa fa-chevron-left"></i> Back</a>
+                            <a href="/aws-articles/edit/<%= article._id %>" class="btn btn-primary" title="Edit this user"><i class="fa fa-edit"></i> Edit</a>
                             <form method="post" style="display:none;" action="/admin-users/delete/<%= article._id %>" id="postDelete_<%= article._id %>">
                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             </form>
