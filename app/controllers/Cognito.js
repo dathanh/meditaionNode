@@ -25,7 +25,7 @@ exports.login = (req, res) => {
             onSuccess: function(result) {
                 console.log(result);
                 req.session.CognitoAccessToken = result.getAccessToken().getJwtToken();
-                res.redirect('/admin-users/index')
+                res.redirect('/admin/admin-users/index')
             },
 
             onFailure: function(err) {

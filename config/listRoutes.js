@@ -6,6 +6,7 @@ module.exports = {
             index: {
                 method: ["get"],
                 routes: "/admin-users/index",
+                link: "/admin-users/index",
             },
             add: {
                 method: ["get", "post", "put"],
@@ -131,15 +132,19 @@ module.exports = {
         Articles: {
             getArticles: {
                 method: ["get"],
-                routes: "/api/articles/all",
+                routes: "/articles/all",
             },
             detailArticles: {
                 method: ["get"],
-                routes: "/api/articles/:id",
+                routes: "/articles/:id",
             },
             addArticles: {
                 method: ["post"],
-                routes: "/api/articles/add",
+                routes: "/articles/add",
+            },
+            editArticles: {
+                method: ["post"],
+                routes: "/articles/edit/:id",
             },
         }
     }

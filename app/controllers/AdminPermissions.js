@@ -21,7 +21,7 @@ app.locals.pathVariable = {
     path: ''
 };
 module.exports = {
-    index: async (req, res) => {
+    index: async (req, res,next) => {
 
             var search = {};
             if (req.query.title) {
@@ -54,7 +54,7 @@ module.exports = {
             }
 
             const pageCount = Math.ceil(itemCount / req.query.limit);
-
+console.log(optionRole);
             res.render('AdminPermissions/index.ejs', {
                 csrfToken: req.csrfToken(),
                 req: req,

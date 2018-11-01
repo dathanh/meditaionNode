@@ -79,7 +79,7 @@ exports.add = (req, res) => {
             success = req.flash('success');
             error = req.flash('error');
 
-            res.redirect('/aws-articles/add');
+            res.redirect('/admin/aws-articles/add');
         } else {
             let article = new ArticlesTable();
             var day = dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");

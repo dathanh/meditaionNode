@@ -7,7 +7,7 @@ var mongoose = require('mongoose');
 var AdminUsersTable = require("../models/AdminUsersTable");
 var Validator = require('Validator')
 var jsonwebtoken = require('jsonwebtoken');
-
+const empty = require('is-empty');
 var rules = {
     name: 'required',
     email: 'required|email',

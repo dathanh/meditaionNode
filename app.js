@@ -17,7 +17,7 @@ var morgan = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-var bodyParser = require('body-parser');
+
 var dateFormat = require('dateformat');
 var now = new Date();
 var expressLayouts = require('express-ejs-layouts');
@@ -81,6 +81,9 @@ app.locals = {
     menuContent: menuContent,
     checkExist: (prop, obj = {}) => {
         return obj.hasOwnProperty(prop);
+    },
+    toNum:(string)=>{
+        return parseInt(string);
     }
 }
 require('./config/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport

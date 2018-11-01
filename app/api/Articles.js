@@ -7,6 +7,8 @@ var mongoose = require('mongoose');
 var ArticlesTable = require("../models/ArticlesTable");
 var Validator = require('Validator');
 var jsonwebtoken = require('jsonwebtoken');
+var express = require('express');
+var app = express();
 const path = require('path');
 const empty = require('is-empty');
 
@@ -130,6 +132,54 @@ module.exports = {
 
         }
 
-    }
+    },
+    editArticles: (req, res) => {
+        if (req.method == "POST") {
+            ArticlesTable.find({
+                _id: req.params.id
+            }).lean().exec(function(err, odlData) {
+                if (err) {
+                    console.log("Error:", err);
+                } else {
+                    console.log();
+
+                    if (!empty(req.body.image)) {
+                        var base64Data = req.body.image.replace(/^data:image\/png;base64,/, "");
+                        var fileName = Math.floor(Date.now() / 1000) + '.png';
+                        const directoryPath = path.join(__dirname, `../../public/upload/image/${fileName}`);
+                        require("fs").writeFile(directoryPath, base64Data, 'base64', function(err) {
+                            console.log(err);
+                        });
+                    }
+
+                    var day = dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
+                    ArticlesTable.findByIdAndUpdate(req.params.id, {
+                        $set: {
+                            name: !empty(req.body.name) ? req.body.name : odlData[0].name,
+                            title: !empty(req.body.title) ? req.body.title : odlData[0].title,
+                            description: !empty(req.body.description) ? req.body.description : odlData[0].description,
+                            thumbnail: !empty(fileName) ? `/upload/image/${ fileName}` : odlData[0].thumbnail,
+                            status: !empty(req.body.status) ? req.body.status : odlData[0].status,
+                            updated_date: day,
+                        }
+                    }, {
+                        new: true
+                    }, function(err, result) {
+                        if (err) {
+                            res.status(500).send('cant update article');
+                        } else {
+                            res.status(200).send({
+                                status: 'Success',
+                                data: result,
+                            });
+
+                        }
+                    });
+                }
+            });
+
+        }
+
+    },
 
 }
