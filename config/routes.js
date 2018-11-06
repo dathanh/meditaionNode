@@ -30,12 +30,13 @@ module.exports = function(app, passport) {
     console.log(createRoutes.getResource());
     app.post('/api/admin-users/login', AdminUsersApi.login);
     app.use('/api/', AdminUsersApi.checkLogin, createRoutes.getRouter());
+    // app.use('/api/',  createRoutes.getRouter());
     createRoutes.setResource(listRoutes.Controller);
     createRoutes.setRoutes();
     app.locals.routesLink = createRoutes.getResource();
     console.log(createRoutes.getResource());
     // app.use('/', permission.login, permission.checkPermissions(), csrfProtection, createRoutes.getRouter());
-    app.use('/admin/', Cognito.checkLogin, csrfProtection, createRoutes.getRouter());
-    // app.use('/', csrfProtection, createRoutes.getRouter());
+    // app.use('/admin/', Cognito.checkLogin, csrfProtection, createRoutes.getRouter());
+    app.use('/admin', csrfProtection, createRoutes.getRouter());
 
 }

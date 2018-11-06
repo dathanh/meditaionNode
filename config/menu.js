@@ -3,7 +3,7 @@ module.exports = [{
         name: 'AdminUsers',
         icon: 'users',
         index: {
-            link: '/' + Inflector.dasherize(Inflector.underscore('AdminUsers')) + '/index',
+            link: '/admin/' + Inflector.dasherize(Inflector.underscore('AdminUsers')) + '/index',
             name: 'List Admin Usres',
         },
         add: {
@@ -15,11 +15,11 @@ module.exports = [{
         name: 'AdminPermissions',
         icon: 'diamond',
         index: {
-            link: '/admin-permissions/index',
+            link: '/admin/admin-permissions/index',
             name: 'List Admin Permissions'
         },
         add: {
-            link: '/admin-permissions/add',
+            link: '/admin/admin-permissions/add',
             name: 'Add Admin Permission'
         }
     },
@@ -27,11 +27,11 @@ module.exports = [{
         name: 'AdminRoles',
         icon: 'flask',
         index: {
-            link: '/admin-roles/index',
+            link: '/admin/admin-roles/index',
             name: 'List Admin Roles'
         },
         add: {
-            link: '/admin-roles/add',
+            link: '/admin/admin-roles/add',
             name: 'Add Admin Roles'
         }
     },
@@ -39,22 +39,22 @@ module.exports = [{
         name: 'Articles',
         icon: 'flask',
         index: {
-            link: '/articles/index',
+            link: '/admin/articles/index',
             name: 'List Articles'
         },
         add: {
-            link: '/articles/add',
+            link: '/admin/articles/add',
             name: 'Add Articles'
         }
     }, {
         name: 'AwsArticles',
         icon: 'flask',
         index: {
-            link: '/aws-articles/index',
+            link: '/admin/aws-articles/index',
             name: 'List Aws Articles'
         },
         add: {
-            link: '/aws-articles/add',
+            link: '/admin/aws-articles/add',
             name: 'Add Aws Articles'
         }
     }

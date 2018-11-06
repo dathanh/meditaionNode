@@ -1,6 +1,9 @@
-var Inflector = require('inflector-js');
-module.exports = {
+const Inflector = require('inflector-js');
+const Utils = require('../app/controllers/Utils');
+const Utility = new Utils.Utility();
+var routesList = {
     Controller: {
+        __prefix: '/admin',
         AdminUsers: {
             __prefix: Inflector.dasherize(Inflector.underscore("AdminUsers")),
             index: {
@@ -115,6 +118,7 @@ module.exports = {
         },
     },
     Api: {
+        __prefix: '/api',
         AdminUsers: {
             getUser: {
                 method: ["get"],
@@ -127,6 +131,10 @@ module.exports = {
             upload: {
                 method: ["post"],
                 routes: "",
+            },
+            getAllUsers: {
+                method: ["get"],
+                routes: "/admin-users/getAllUsers",
             }
         },
         Articles: {
@@ -149,3 +157,4 @@ module.exports = {
         }
     }
 }
+module.exports = routesList;

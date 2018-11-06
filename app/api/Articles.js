@@ -1,185 +1,96 @@
-var numeral = require('numeral');
-var bcrypt = require('bcrypt-nodejs');
-var dateFormat = require('dateformat');
-var flash = require('connect-flash')
-var constant = require('../../config/constants');
-var mongoose = require('mongoose');
 var ArticlesTable = require("../models/ArticlesTable");
-var Validator = require('Validator');
-var jsonwebtoken = require('jsonwebtoken');
-var express = require('express');
-var app = express();
-const path = require('path');
-const empty = require('is-empty');
-
+const Utils = require('../controllers/Utils');
+const Utility = new Utils.Utility();
 var rules = {
     name: 'required',
     title: 'required',
     description: 'required',
     thumbnail: 'emptythumbnail',
     status: 'required',
-}
-module.exports = {
-    getArticles: (req, res) => {
-        ArticlesTable.find({}).lean().exec(function(err, result) {
-            if (err) {
-                console.log("Error:", err);
+};
+exports.getArticles = (req, res) => {
+    let response = new Utils.ApiStructure(req, res);
+    ArticlesTable.find({}).lean().exec(function(err, result) {
+        if (err) {
+            response.actionInvalid(err);
+        } else {
+            if (Utility.empty(result)) {
+                response.actionNotFound();
             } else {
-                res.header("Access-Control-Allow-Origin", "http://localhost:8042"); //* will allow from all cross domain
-                res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-                res.header("Access-Control-Allow-Methods", "GET");
-                res.send({
-                    status: 'success',
-                    data: result,
-                });
-                res.end();
+                response.actionSuccess(result);
+            }
+
+        }
+    });
+};
+exports.detailArticles = (req, res) => {
+    let response = new Utils.ApiStructure(req, res);
+    if (req.params.id) {
+        ArticlesTable.find({
+            _id: req.params.id,
+        }).lean().exec(function(err, result) {
+            if (err) {
+                response.actionInvalid(err);
+            } else {
+                if (Utility.empty(result)) {
+                    response.actionNotFound();
+                } else {
+                    response.actionSuccess(result);
+                }
             }
         });
-    },
-    detailArticles: (req, res) => {
-        if (req.params.id) {
-            ArticlesTable.find({
-                _id: req.params.id,
-            }).lean().exec(function(err, result) {
-                if (err) {
-                    res.status('500').send({
-                        status: 'Failure',
-                        message: 'Methods Invalid',
-                    });
-                } else {
-                    if (!empty(result)) {
-                        res.header("Access-Control-Allow-Origin", "http://localhost:8042"); //* will allow from all cross domain
-                        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-                        res.header("Access-Control-Allow-Methods", "GET");
-                        res.status(200).send({
-                            status: 'Success',
-                            data: result,
-                        });
-                        res.end();
-                    } else {
-                        res.status('500').send({
-                            status: 'Failure',
-                            message: 'Methods Invalid',
-                        });
-                    }
+    } else {
+        response.actionInvalid();
+    }
 
-                }
-            });
+};
+exports.addArticles = async (req, res) => {
+    let response = new Utils.ApiStructure(req, res);
+    if (req.method == "POST") {
+        var requireThumbnail = (name, value, params) => {
+            return (!Utility.empty(req.files));
+        }
+        var v = Utility.Validator.make(req.body, rules);
+        v.extend('emptythumbnail', requireThumbnail, "Thumbnail is required");
+        if (v.fails()) {
+            response.actionInvalid(v.getErrors());
         } else {
-            res.status('500').send({
-                status: 'Failure',
-                message: 'Methods Invalid',
-            });
-        }
-
-    },
-    addArticles: (req, res) => {
-
-        if (req.method == "POST") {
-            ArticlesTable.find({}).sort([
-                ['_id', 'descending']
-            ]).limit(1).exec((err, articleDB) => {
-                var requireThumbnail = (name, value, params) => {
-                    return (!empty(req.files));
+            let controller = new Utils.Controller(req, res, 'Articles');
+            await controller.uploadFile('thumbnail', (data) => {
+                if (data) {
+                    req.body.thumbnail = data
                 }
-                var v = Validator.make(req.body, rules);
-                v.extend('emptythumbnail', requireThumbnail, "Thumbnail is required");
-                if (v.fails()) {
-                    res.status(500).send({
-                        status: 'Failure',
-                        message: v.getErrors(),
-                    });
-                } else {
-                    let article = new ArticlesTable();
-                    var day = dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
-                    let thumbnail = req.files.thumbnail;
-                    var thumbnailPath = `/upload/image/${req.files.thumbnail.name}`;
-                    const directoryPath = path.join(__dirname, `../../public/upload/image/${req.files.thumbnail.name}`);
-                    thumbnail.mv(directoryPath, function(err) {
-                        if (err) {
-                            res.status(500).send({
-                                status: 'Failure',
-                                message: 'image cant upload',
-                            });
-
-                        } else {
-                            article._id = (articleDB.hasOwnProperty('0')) ? articleDB[0]._id + 1 : 1;
-                            article.name = req.body.name;
-                            article.title = req.body.title;
-                            article.description = req.body.description;
-                            article.thumbnail = thumbnailPath;
-                            article.status = (req.body.status) ? 'active' : 'inactive';
-                            article.created_date = day;
-                            article.updated_date = day;
-                            article.save(function(err, result) {
-                                if (err) {
-                                    res.status(500).send('cant post new article');
-                                } else {
-                                    res.status(200).send({
-                                        status: 'Success',
-                                        data: result,
-                                    });
-                                }
-
-                            });
-                        }
-                    });
-
-
-                }
-
             });
-
-        }
-
-    },
-    editArticles: (req, res) => {
-        if (req.method == "POST") {
-            ArticlesTable.find({
-                _id: req.params.id
-            }).lean().exec(function(err, odlData) {
+            let article = await controller.createEntity(req.body);
+            article.save(function(err, result) {
                 if (err) {
-                    console.log("Error:", err);
+                    response.actionInvalid('cant post new article');
                 } else {
-                    console.log();
-
-                    if (!empty(req.body.image)) {
-                        var base64Data = req.body.image.replace(/^data:image\/png;base64,/, "");
-                        var fileName = Math.floor(Date.now() / 1000) + '.png';
-                        const directoryPath = path.join(__dirname, `../../public/upload/image/${fileName}`);
-                        require("fs").writeFile(directoryPath, base64Data, 'base64', function(err) {
-                            console.log(err);
-                        });
-                    }
-
-                    var day = dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
-                    ArticlesTable.findByIdAndUpdate(req.params.id, {
-                        $set: {
-                            name: !empty(req.body.name) ? req.body.name : odlData[0].name,
-                            title: !empty(req.body.title) ? req.body.title : odlData[0].title,
-                            description: !empty(req.body.description) ? req.body.description : odlData[0].description,
-                            thumbnail: !empty(fileName) ? `/upload/image/${ fileName}` : odlData[0].thumbnail,
-                            status: !empty(req.body.status) ? req.body.status : odlData[0].status,
-                            updated_date: day,
-                        }
-                    }, {
-                        new: true
-                    }, function(err, result) {
-                        if (err) {
-                            res.status(500).send('cant update article');
-                        } else {
-                            res.status(200).send({
-                                status: 'Success',
-                                data: result,
-                            });
-
-                        }
-                    });
+                    response.actionSuccess(result);
                 }
             });
-
         }
 
-    },
+    }
 
-}
+};
+exports.editArticles = async (req, res) => {
+    if (req.method == "POST") {
+        let response = new Utils.ApiStructure(req, res);
+        let controller = new Utils.Controller(req, res, 'Articles');
+        await controller.uploadFile('thumbnail', (data) => {
+            if (data) {
+                req.body.thumbnail = data
+            }
+        });
+        await controller.updateById(req.params.id, req.body, (data) => {
+            if (data) {
+                response.actionSuccess(data);
+            } else {
+                response.actionInvalid('cant post edit article');
+            }
+        });
+
+    }
+
+};

@@ -154,14 +154,18 @@ exports.getFileFromS3 = () => {
 exports.maxId = (database, callback) => {
     var scanningParameters = {
         TableName: database,
-        Select: 'COUNT'
+        Limit: 1,
+        Key: {
+            id: "1",
+        }
+
     };
 
-    docClient.scan(scanningParameters, (err, data) => {
+    docClient.get(scanningParameters, (err, data) => {
         if (err) {
             callback(err, null);
         } else {
-            callback(null, data.Count);
+            callback(null, data);
         }
     });
 }

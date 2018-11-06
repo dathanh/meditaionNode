@@ -10,7 +10,7 @@
         </div>
 
         <div class="box-body">
-            <form method="post" class='form-horizontal' encType="multipart/form-data" novalidate='novalidate'>
+            <form method="post" action="/admin/aws-articles/add" class='form-horizontal' encType="multipart/form-data" novalidate='novalidate'>
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <div class="form-group  <%= (checkExist('name',errors)) ? 'has-error' : '' %>">
                     <label class="col-md-2 control-label" for="name"><%= __('Name'); %><span class="text-danger">(*)</span></label>

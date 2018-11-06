@@ -83,46 +83,45 @@ exports.add = (req, res) => {
         } else {
             let article = new ArticlesTable();
             var day = dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
-            LambdaFunction.maxId('ArticlesTable', (err, maxId) => {
-                LambdaFunction.getArticles(maxId + 1, 'fake', (err, data) => {
-                    if (data.Count == 0) {
-                        LambdaFunction.addArticles(req.body, 'fake', (err, data) => {
+            LambdaFunction.maxId('Reference', (err, maxId) => {
+                LambdaFunction.addArticles(req.body, 'fake', (err, data) => {
+                    var params = {
+                        Bucket: 'meditationnodejs/upload',
+                        Key: req.files.thumbnail.name,
+                        Body: req.files.thumbnail.data,
+                        ACL: 'public-read-write',
+                        ContentType: req.files.thumbnail.mimetype,
+                    };
+                    s3.upload(params, function(err, data) {
+                        if (err) {
+                            console.log('error in callback');
+                            console.log(err);
+                        }
+                        if (data) {
+                            var day = dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
                             var params = {
-                                Bucket: 'meditationnodejs/upload',
-                                Key: req.files.thumbnail.name,
-                                Body: req.files.thumbnail.data,
-                                ACL: 'public-read-write',
-                                ContentType: req.files.thumbnail.mimetype,
+                                TableName: 'ArticlesTable',
+                                Item: {
+                                    "id": 13 ,
+                                    "name": req.body.name,
+                                    "title": req.body.title,
+                                    "description": req.body.description,
+                                    "thumbnail": data.Location,
+                                    "status": "active",
+                                    "created_date": day,
+                                    "updated_date": day,
+                                }
                             };
-                            s3.upload(params, function(err, data) {
-                                if (err) {
-                                    console.log('error in callback');
-                                    console.log(err);
-                                }
-                                if (data) {
-                                    var day = dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
-                                    var params = {
-                                        TableName: 'ArticlesTable',
-                                        Item: {
-                                            "id": maxId + 1,
-                                            "name": req.body.name,
-                                            "title": req.body.title,
-                                            "description": req.body.description,
-                                            "thumbnail": data.Location,
-                                            "status": "active",
-                                            "created_date": day,
-                                            "updated_date": day,
-                                        }
-                                    };
-                                    var documentClient = new AWS.DynamoDB.DocumentClient();
-                                    documentClient.put(params, function(err, data) {});
-                                }
+                            var documentClient = new AWS.DynamoDB.DocumentClient();
+                            documentClient.put(params, function(err, data) {
+                                console.log(data+'update---------------------data');
+                                console.log(err+'update----------------');
                             });
-                        })
-                    }
+                        }
+                    });
                 })
             });
-            res.redirect('/aws-articles/add');
+            res.redirect('/admin/aws-articles/index');
         }
 
     } else if (req.method == "GET") {

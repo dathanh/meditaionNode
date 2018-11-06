@@ -3,19 +3,24 @@ var router = express.Router();
 var AdminUsers = require('../app/controllers/AdminUsers');
 // var home = require('../app/controllers/home');
 var Inflector = require('inflector-js');
+const Utils = require('../app/controllers/Utils');
+const Utility = new Utils.Utility();
 var permissionCheck = require('./permissions');
-
+var express = require('express');
+var app = express();
 module.exports = {
     setRoutes: (filename) => {
         fileControllers = module.exports.getFilename(filename);
-
         for (var controller in resource) {
             if (resource.hasOwnProperty(controller)) {
                 for (var action in resource[controller]) {
-                    if (resource[controller].hasOwnProperty(action)) {
+                    if (resource[controller].hasOwnProperty(action) && (controller !== '__prefix')) {
                         tmpAction = resource[controller][action];
                         if (resource[controller][action].routes == "") {
                             resource[controller][action].routes = '/' + Inflector.dasherize(Inflector.underscore(controller)) + '/' + Inflector.dasherize(Inflector.underscore(action));
+                            resource[controller][action].link = resource.__prefix + resource[controller][action].routes
+                        } else {
+                            resource[controller][action].link = resource.__prefix + resource[controller][action].routes
                         }
                         if (fileControllers[controller].hasOwnProperty('index')) {
                             router.get('/' + Inflector.dasherize(Inflector.underscore(controller)), fileControllers[controller].index);
@@ -43,6 +48,10 @@ module.exports = {
                     }
                 }
             }
+        }
+        app.locals = {
+            Controller: resource['Controller'],
+            Api: resource['Api']
         }
     },
     getResource: () => resource,
