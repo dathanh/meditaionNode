@@ -55,7 +55,7 @@ class Controller {
         this.table = require("../models/" + TableName + 'Table');
         this.uploadPath = {};
     };
-    async uploadFile(fieldName, callback) {
+    async uploadFile(fieldName) {
         let testUtility = new Utility();
         if (!empty(this.req.files[fieldName])) {
             let imageData = this.req.files[fieldName];
@@ -63,13 +63,14 @@ class Controller {
             var imagePath = `/upload/image/${fileName}`;
             const directoryPath = path.join(__dirname, `../../public/upload/image/${fileName}`);
             // var test = imageData.mv(directoryPath);
-            await imageData.mv(directoryPath).then(() => {
-                callback(imagePath);
-            }, (error) => {
-                callback(false);
-            });
+            try {
+                var filePath = await imageData.mv(directoryPath);
+                return fileName;
+            } catch (e) {
+                return false;
+            }
         } else {
-            callback(false);
+            return false;
         }
     };
     async createEntity(reqData) {

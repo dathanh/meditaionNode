@@ -49,11 +49,10 @@ exports.add = async (req, res) => {
             error = req.flash('error');
             res.redirect('back');
         } else {
-            await controller.uploadFile('thumbnail', (data) => {
-                if (data) {
-                    req.body.thumbnail = data
-                }
-            });
+            var data = await controller.uploadFile('thumbnail');
+            if (data) {
+                req.body.thumbnail = data;
+            }
             let article = await controller.createEntity(req.body);
             article.save(function(err, result) {
                 if (err) {
@@ -102,11 +101,10 @@ exports.edit = async (req, res) => {
                 error = req.flash('error');
                 res.redirect('back');
             } else {
-                await controller.uploadFile('thumbnail', (data) => {
-                    if (data) {
-                        req.body.thumbnail = data
-                    }
-                });
+                var data = await controller.uploadFile('thumbnail');
+                if (data) {
+                    req.body.thumbnail = data;
+                }
                 await controller.updateById(req.params.id, req.body, (data) => {
                     if (data) {
                         success = req.flash('success', 'update complete');
@@ -173,14 +171,14 @@ exports.delete = (req, res) => {
                 if (err) {
                     console.log("Error:", err);
                 } else {
-                    res.redirect('/articles/index');
+                    res.redirect('/admin/articles/index');
                 }
 
             });
 
         }
     } else {
-        res.redirect('/articles/index');
+        res.redirect('/admin/articles/index');
     }
 
 };
