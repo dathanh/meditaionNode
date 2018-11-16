@@ -180,7 +180,7 @@ exports.delete = (req, res) => {
 
         }
     } else {
-        res.redirect('/articles/index')
+        res.redirect('/articles/index');
     }
 
 };
