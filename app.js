@@ -22,7 +22,8 @@ var dateFormat = require('dateformat');
 var now = new Date();
 var expressLayouts = require('express-ejs-layouts');
 var menuContent = require('./config/menu');
-
+const Utils = require('././app/controllers/Utils');
+const Utility = new Utils.Utility();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -82,10 +83,14 @@ app.locals = {
     checkExist: (prop, obj = {}) => {
         return obj.hasOwnProperty(prop);
     },
-    toNum:(string)=>{
+    toNum: (string) => {
         return parseInt(string);
-    }
+    },
 }
+app.locals.info = {};
+app.locals.success = {};
+app.locals.error = {};
+app.locals.Routes = Utility.Routes;
 require('./config/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
 

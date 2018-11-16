@@ -78,42 +78,42 @@ var routesList = {
             __prefix: Inflector.dasherize(Inflector.underscore("Articles")),
             index: {
                 method: ["get"],
-                routes: "/articles/index",
+                routes: "/admin/articles/index",
             },
             add: {
                 method: ["get", "post", "put"],
-                routes: "",
+                routes: "/admin/articles/add",
             },
             edit: {
                 method: ["post", "put", 'get'],
-                routes: "/articles/edit/:id",
+                routes: "/admin/articles/edit/:id",
             },
             view: {
                 method: ['get'],
-                routes: "/articles/view/:id",
+                routes: "/admin/articles/view/:id",
             },
             delete: {
                 method: ["delete", "put", "post"],
-                routes: "/articles/delete/:id",
+                routes: "/admin/articles/delete/:id",
             },
         },
         AwsArticles: {
             __prefix: Inflector.dasherize(Inflector.underscore("AwsArticles")),
             index: {
                 method: ["get"],
-                routes: "/aws-articles/index",
+                routes: "/admin/aws-articles/index",
             },
             view: {
                 method: ["get"],
-                routes: "/aws-articles/view/:id",
+                routes: "/admin/aws-articles/view/:id",
             },
             add: {
                 method: ["get", "post", "put"],
-                routes: "/aws-articles/add",
+                routes: "/admin/aws-articles/add",
             },
             edit: {
                 method: ["get", "post", "put"],
-                routes: "/aws-articles/edit/:id",
+                routes: "/admin/aws-articles/edit/:id",
             },
         },
     },

@@ -21,6 +21,7 @@ exports.getArticles = (events, ctx, callback) => {
 
     var scanningParameters = {
         TableName: events,
+        ScanIndexForward: false,
     };
 
     docClient.scan(scanningParameters, (err, data) => {
@@ -165,7 +166,34 @@ exports.maxId = (database, callback) => {
         if (err) {
             callback(err, null);
         } else {
-            callback(null, data);
+            callback(null, data.Item.articles);
+        }
+    });
+}
+
+exports.updateReference = (events, ctx, callback) => {
+    var day = dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
+    var params = {
+        TableName: 'Reference',
+        Key: {
+            "id": '1'
+        },
+        UpdateExpression: "set articles = :a",
+        ExpressionAttributeValues: {
+            // ":n": events.name,
+            ":a": parseInt(events),
+
+        },
+        ReturnValues: "UPDATED_NEW"
+    };
+
+    var documentClient = new AWS.DynamoDB.DocumentClient();
+
+    documentClient.update(params, function(err, data) {
+        if (err) {
+            callback(err);
+        } else {
+            callback(data);
         }
     });
 }

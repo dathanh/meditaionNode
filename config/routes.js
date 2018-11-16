@@ -37,6 +37,6 @@ module.exports = function(app, passport) {
     console.log(createRoutes.getResource());
     // app.use('/', permission.login, permission.checkPermissions(), csrfProtection, createRoutes.getRouter());
     // app.use('/admin/', Cognito.checkLogin, csrfProtection, createRoutes.getRouter());
-    app.use('/admin', csrfProtection, createRoutes.getRouter());
+    app.use('/', csrfProtection, createRoutes.getRouter());
 
 }

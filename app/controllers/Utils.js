@@ -72,7 +72,6 @@ class Controller {
             callback(false);
         }
     };
-
     async createEntity(reqData) {
         let lastEntity = await this.table.find({}).sort([
             ['_id', 'descending']
@@ -88,7 +87,7 @@ class Controller {
         newEntity.created_date = testUtility.dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
         newEntity.updated_date = testUtility.dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
         newEntity.status = (reqData.status) ? 'active' : 'inactive';
-        console.log(newEntity);
+
         return newEntity;
     };
     async uploadBase64() {
@@ -132,6 +131,51 @@ class Controller {
             });
         }
     }
+    async pagination() {
+        var search = {};
+        if (this.req.query.title) {
+            search = {
+                $or: [{
+                    email: new RegExp(this.req.query.title, "i"),
+                }, {
+                    name: new RegExp(this.req.query.title, "i"),
+                }]
+            }
+        }
+
+        if (this.req.query.sort) {
+            let filter = {}
+            filter[this.req.query.sort] = this.req.query.order;
+            var [results, itemCount] = await Promise.all([
+                this.table.find(search).limit(this.req.query.limit).sort(filter).skip(req.skip).lean().exec(),
+                this.table.estimatedDocumentCount(search)
+            ]);
+
+        } else {
+            var [results, itemCount] = await Promise.all([
+                this.table.find(search).limit(this.req.query.limit).skip(this.req.skip).lean().exec(),
+                this.table.estimatedDocumentCount(search)
+            ]);
+
+        }
+        const pageCount = Math.ceil(itemCount / this.req.query.limit);
+        return {
+            results: results,
+            itemCount: itemCount,
+            pageCount: pageCount
+        }
+    }
+    async getEntityById(idEntity) {
+        let entityData = '';
+        try {
+            entityData = await this.table.findOne({
+                _id: idEntity,
+            }).lean().exec();
+            return entityData;
+        } catch (e) {
+            return false;
+        }
+    }
 }
 class Utility {
     constructor() {
@@ -146,7 +190,10 @@ class Utility {
         this.path = require('path');
         this.empty = require('is-empty');
         this.Inflector = require('inflector-js');
-        this.Routes = require('../../config/listRoutes');
+        this.Routes = require('../../config/listRoutes').Controller;
+        this.express = require('express');
+        this.paginate = require('express-paginate');;
+        this.app = this.express();
     }
 
 }

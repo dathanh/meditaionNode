@@ -6,7 +6,7 @@
     <div class="ibox-content">
         <div class="row">
 
-            <form method="get" accept-charset="utf-8" name="filterForm" action="/articles/index">
+            <form method="get" accept-charset="utf-8" name="filterForm" action="/admin/articles/index">
                 <div class="col-sm-4">
                     <div class="input-group">
                         <input type="text" placeholder="Search" name="title" value="" class="input-sm form-control">
@@ -19,14 +19,13 @@
 
 
             <div class="col-sm-4 m-b-xs">
-                <a href="/articles/add"  title="Add Articles" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i>"Add Article</a>
+                <a href="<%= Routes.Articles.index.routes %>"  title="Add Articles" class="btn btn-primary"><i class="fa fa-pencil-square-o"></i>"Add Article</a>
             </div>
         </div>
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th><a href="<%= paginate.href({ order: (req.query.order == 1)? -1 : 1,sort:'_id' }) %>">id</a></th>
                         <th><a href="<%= paginate.href({ order: (req.query.order == 1)? -1 : 1,sort:'email' }) %>">name</a></th>
                         <th><a href="<%= paginate.href({ order: (req.query.order == 1)? -1 : 1,sort:'name' }) %>">title</a></th>
                         <th><a href="<%= paginate.href({ order: (req.query.order == 1)? -1 : 1,sort:'status' }) %>">description</a></th>
@@ -63,9 +62,9 @@
                             <%= article.created_date %>
                         </td>
                         <td class="actions">
-                            <a class="btn btn-primary" href="/articles/view/<%= article._id %>"><i class="fa fa-eye"></i></a>
-                            <a class="btn btn-success" href="/articles/edit/<%= article._id %>"><i class="fa fa-edit"></i></a>
-                            <form method="post" style="display:none;" action="/articles/delete/<%= article._id %>" id="postDelete_<%= article._id %>">
+                            <a class="btn btn-primary" href="/admin/articles/view/<%= article._id %>"><i class="fa fa-eye"></i></a>
+                            <a class="btn btn-success" href="/admin/articles/edit/<%= article._id %>"><i class="fa fa-edit"></i></a>
+                            <form method="post" style="display:none;" action="/admin/articles/delete/<%= article._id %>" id="postDelete_<%= article._id %>">
                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             </form>
                                 <a class="btn btn-danger" onclick='if (confirm("Are you sure you want to delete # 12?")) { document.getElementById("postDelete_<%= article._id %>").submit(); } event.returnValue = false; return false;' href="#"><i class="fa fa-trash-o"></i></a>
