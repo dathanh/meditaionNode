@@ -5,7 +5,6 @@ var routesList = {
     Controller: {
         __prefix: '/admin',
         AdminUsers: {
-            __prefix: Inflector.dasherize(Inflector.underscore("AdminUsers")),
             index: {
                 method: ["get"],
                 routes: "/admin-users/index",
@@ -29,7 +28,6 @@ var routesList = {
             },
         },
         AdminPermissions: {
-            __prefix: Inflector.dasherize(Inflector.underscore("AdminPermissions")),
             index: {
                 method: ["get"],
                 routes: "/admin-permissions/index",
@@ -52,7 +50,6 @@ var routesList = {
             },
         },
         AdminRoles: {
-            __prefix: Inflector.dasherize(Inflector.underscore("AdminRoles")),
             index: {
                 method: ["get"],
                 routes: "/admin-roles/index",
@@ -75,45 +72,43 @@ var routesList = {
             },
         },
         Articles: {
-            __prefix: Inflector.dasherize(Inflector.underscore("Articles")),
             index: {
                 method: ["get"],
-                routes: "/admin/articles/index",
+                routes: "/articles/index",
             },
             add: {
                 method: ["get", "post", "put"],
-                routes: "/admin/articles/add",
+                routes: "/articles/add",
             },
             edit: {
                 method: ["post", "put", 'get'],
-                routes: "/admin/articles/edit/:id",
+                routes: "/articles/edit/:id",
             },
             view: {
                 method: ['get'],
-                routes: "/admin/articles/view/:id",
+                routes: "/articles/view/:id",
             },
             delete: {
                 method: ["delete", "put", "post"],
-                routes: "/admin/articles/delete/:id",
+                routes: "/articles/delete/:id",
             },
         },
         AwsArticles: {
-            __prefix: Inflector.dasherize(Inflector.underscore("AwsArticles")),
             index: {
                 method: ["get"],
-                routes: "/admin/aws-articles/index",
+                routes: "/aws-articles/index",
             },
             view: {
                 method: ["get"],
-                routes: "/admin/aws-articles/view/:id",
+                routes: "/aws-articles/view/:id",
             },
             add: {
                 method: ["get", "post", "put"],
-                routes: "/admin/aws-articles/add",
+                routes: "/aws-articles/add",
             },
             edit: {
                 method: ["get", "post", "put"],
-                routes: "/admin/aws-articles/edit/:id",
+                routes: "/aws-articles/edit/:id",
             },
         },
     },

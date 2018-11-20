@@ -80,6 +80,9 @@ exports.add = async (req, res) => {
 
 };
 exports.edit = async (req, res) => {
+    if (Utility.app.locals.pathVariable.path != req.path) {
+        Utility.app.locals.pathVariable = '';
+    }
     var controller = new Utils.Controller(req, res, 'Articles');
     if (req.params.id.length > 0) {
         if (Utility.app.locals.pathVariable.path != req.path) {
@@ -173,12 +176,9 @@ exports.delete = (req, res) => {
                 } else {
                     res.redirect('/admin/articles/index');
                 }
-
             });
-
         }
     } else {
         res.redirect('/admin/articles/index');
     }
-
 };

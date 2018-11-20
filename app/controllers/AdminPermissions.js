@@ -1,15 +1,7 @@
-var numeral = require('numeral');
-var express = require('express');
-var app = express();
-var bcrypt = require('bcrypt-nodejs');
-var dateFormat = require('dateformat');
-var flash = require('connect-flash')
-var constant = require('../../config/constants');
-var mongoose = require('mongoose');
-var AdminPermissionsTable = require("../models/AdminPermissionsTable");
-var AdminRolesTable = require("../models/AdminRolesTable");
-const Validator = require('Validator');
-const paginate = require('express-paginate');
+const AdminPermissionsTable = require("../models/AdminPermissionsTable");
+const AdminRolesTable = require("../models/AdminRolesTable");
+const Utils = require('../controllers/Utils');
+const Utility = new Utils.Utility();
 const rules = {
     controller: 'required',
     action: 'required',
@@ -17,43 +9,14 @@ const rules = {
     role_id: 'integer',
 
 }
-app.locals.pathVariable = {
+Utility.app.locals.pathVariable = {
     path: ''
 };
-exports.index = async (req, res, next) => {
-
-    var search = {};
-    if (req.query.title) {
-        search = {
-            $or: [{
-                controller: new RegExp(req.query.title, "i"),
-            }, {
-                action: new RegExp(req.query.title, "i"),
-            }]
-        }
-    }
-
-    if (req.query.sort) {
-        let filter = {}
-        filter[req.query.sort] = req.query.order;
-
-        var [results, itemCount, optionRole] = await Promise.all([
-            AdminPermissionsTable.find(search).limit(req.query.limit).sort(filter).skip(req.skip).lean().exec(),
-            AdminPermissionsTable.count(search),
-            AdminRolesTable.find({}).lean().exec(),
-        ]);
-
-    } else {
-        var [results, itemCount, optionRole] = await Promise.all([
-            AdminPermissionsTable.find(search).limit(req.query.limit).skip(req.skip).lean().exec(),
-            AdminPermissionsTable.count(search),
-            AdminRolesTable.find({}).lean().exec(),
-        ]);
-
-    }
-
-    const pageCount = Math.ceil(itemCount / req.query.limit);
-    console.log(optionRole);
+exports.index = async (req, res) => {
+    let controller = new Utils.Controller(req, res, 'AdminPermissions');
+    var paginations = await controller.pagination();
+    var optionRole = await AdminRolesTable.find({}).lean().exec();
+    console.log(controller.buildRoutes({action:'edit',options:{id:5}}));;
     res.render('AdminPermissions/index.ejs', {
         csrfToken: req.csrfToken(),
         req: req,
@@ -61,85 +24,68 @@ exports.index = async (req, res, next) => {
         error: req.flash("error"),
         success: req.flash("success"),
         info: req.flash('info'),
-        listPermissions: results,
-        pageCount,
-        itemCount,
+        listPermissions: paginations.results,
+        pageCount: paginations.pageCount,
+        itemCount: paginations.itemCount,
         currentPage: req.query.page,
-        pages: paginate.getArrayPages(req)(3, pageCount, req.query.page),
-        has_more: paginate.hasNextPages(req)(pageCount),
+        pages: Utility.paginate.getArrayPages(req)(3, paginations.pageCount, req.query.page),
+        has_more: Utility.paginate.hasNextPages(req)(paginations.pageCount),
         optionRole: optionRole,
     });
 
 };
 exports.add = async (req, res) => {
-    var optionRole = await Promise.all([AdminRolesTable.find({}).lean().exec()]);
-    if (app.locals.pathVariable.path != req.path) {
-        app.locals.pathVariable = '';
+    var optionRole = await AdminRolesTable.find({}).lean().exec();
+    if (Utility.app.locals.pathVariable.path != req.path) {
+        Utility.app.locals.pathVariable = '';
     }
     if (req.method == "POST") {
-        AdminPermissionsTable.find({}).sort([
-            ['_id', 'descending']
-        ]).limit(1).exec((err, AdminPermissionDB) => {
-            var v = Validator.make(req.body, rules);
-            if (v.fails()) {
-                app.locals.pathVariable = {
-                    errors: v.getErrors(),
-                    path: req.path,
-                };
-                res.redirect('/admin-permissions/add');
-            } else {
-                let AdminPermission = new AdminPermissionsTable();
-                var day = dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
-                AdminPermission._id = (AdminPermissionDB.hasOwnProperty('0')) ? AdminPermissionDB[0]._id + 1 : 1;
-                AdminPermission.controller = req.body.controller;
-                AdminPermission.action = req.body.action;
-                AdminPermission.status = (req.body.status) ? 'active' : 'inactive';
-                AdminPermission.role_id = req.body.role_id;
-                AdminPermission.created_date = day;
-                AdminPermission.updated_date = day;
-
-                AdminPermission.save(function(err, result) {
-                    if (err) {
-                        throw err;
-                        console.log("Error:", err);
-                    } else {
-                        console.log('success');
-                        res.redirect('/admin-permissions/index');
-                    }
-
-                });
-            }
-            // res.redirect('/admin-permissions/index');
-
-        });
-
+        let controller = new Utils.Controller(req, res, 'AdminPermissions');
+        var v = Utility.Validator.make(req.body, rules);
+        if (v.fails()) {
+            console.log(v.getErrors());
+            Utility.app.locals.pathVariable = {
+                errors: v.getErrors(),
+                path: req.path,
+            };
+            res.redirect('/admin/admin-permissions/add');
+        } else {
+            let AdminPermissions = await controller.createEntity(req.body);
+            AdminPermissions.save(function(err, result) {
+                if (err) {
+                    error = req.flash('error', 'cant not save data');
+                    res.redirect('/admin/admin-permissions/add');
+                } else {
+                    success = req.flash('success', 'update complete');
+                    res.redirect('/admin/admin-permissions/index');
+                }
+            });
+        }
     } else if (req.method == "GET") {
         res.render('AdminPermissions/add.ejs', {
             title: 'addddddd',
             error: req.flash("error"),
-            errors: app.locals.pathVariable.errors,
+            errors: Utility.app.locals.pathVariable.errors,
             success: req.flash("success"),
             info: req.flash('info'),
             csrfToken: req.csrfToken(),
-            optionRole: optionRole[0],
+            optionRole: optionRole,
         });
     }
 
 
 };
 exports.edit = async (req, res) => {
-    if (app.locals.pathVariable.path != req.path) {
-        app.locals.pathVariable = '';
-    }
-    var optionRole = await Promise.all([AdminRolesTable.find({}).lean().exec()]);
+    let controller = new Utils.Controller(req, res, 'AdminPermissions');
+    var optionRole = await AdminRolesTable.find({}).lean().exec();
     if (req.params.id.length > 0) {
-        if (app.locals.pathVariable.path != req.path) {
-            app.locals.pathVariable = '';
+        if (Utility.app.locals.pathVariable.path != req.path) {
+            Utility.app.locals.pathVariable = '';
         }
         if (req.method == "POST") {
-            var v = Validator.make(req.body, rules);
+            var v = Utility.Validator.make(req.body, rules);
             if (v.fails()) {
-                app.locals.pathVariable = {
+                Utility.app.locals.pathVariable = {
                     errors: v.getErrors(),
                     path: req.path,
                 };
@@ -148,55 +94,33 @@ exports.edit = async (req, res) => {
                 error = req.flash('error');
                 res.redirect('back');
             } else {
-                var day = dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
-                AdminPermissionsTable.findByIdAndUpdate(req.params.id, {
-                    $set: {
-                        controller: req.body.controller,
-                        action: req.body.action,
-                        status: (req.body.status) ? 'active' : 'inactive',
-                        role_id: req.body.role_id,
-                        updated_date: day,
-                    }
-                }, {
-                    new: true
-                }, function(err, result) {
-                    if (err) {
-                        throw err;
-                        console.log("Error:", err);
+                await controller.updateById(req.params.id, req.body, (data) => {
+                    if (data) {
+                        success = req.flash('success', 'update complete');
+                        res.redirect('/admin/admin-permissionss/index');
                     } else {
-                        console.log('success');
-                        res.redirect('/admin-permissions/index');
+                        error = req.flash('error', 'cant not save data');
+                        res.redirect('back');
                     }
                 });
             }
 
         } else if (req.method == "GET") {
-            AdminPermissionsTable.findOne({
-                _id: req.params.id
-            }).exec((err, result) => {
-                if (err) {
-                    console.log("Error:", err);
-
-                } else {
-                    if (result) {
-                        res.render('AdminPermissions/edit.ejs', {
-                            title: 'addddddd',
-                            error: req.flash("error"),
-                            success: req.flash("success"),
-                            info: req.flash('info'),
-                            errors: app.locals.pathVariable.errors,
-                            csrfToken: req.csrfToken(),
-                            adminPermission: result,
-                            optionRole: optionRole[0],
-                        });
-                    } else {
-                        res.redirect('/admin-permissions/index')
-                    }
-
-                }
-
-            });
-
+            dataEntity = await controller.getEntityById(req.params.id);
+            if (dataEntity) {
+                res.render('AdminPermissions/edit.ejs', {
+                    title: 'addddddd',
+                    error: req.flash("error"),
+                    success: req.flash("success"),
+                    info: req.flash('info'),
+                    errors: Utility.app.locals.pathVariable.errors,
+                    csrfToken: req.csrfToken(),
+                    adminPermission: dataEntity,
+                    optionRole: optionRole,
+                });
+            } else {
+                res.redirect('/admin/admin-permissions/index')
+            };
         }
     } else {
         res.redirect('/admin-permissions/index')
@@ -204,34 +128,24 @@ exports.edit = async (req, res) => {
 
 };
 exports.view = async (req, res) => {
-    var optionRole = await Promise.all([AdminRolesTable.find({}).lean().exec()]);
+    let controller = new Utils.Controller(req, res, 'AdminPermissions');
+    var optionRole = await AdminRolesTable.find({}).lean().exec();
     if (req.params.id.length > 0) {
         if (req.method == "GET") {
-            AdminPermissionsTable.findOne({
-                _id: req.params.id
-            }).exec((err, result) => {
-                if (err) {
-                    console.log("Error:", err);
-
-                } else {
-                    if (result) {
-                        res.render('AdminPermissions/view.ejs', {
-                            title: 'addddddd',
-                            error: req.flash("error"),
-                            success: req.flash("success"),
-                            info: req.flash('info'),
-                            csrfToken: req.csrfToken(),
-                            adminPermission: result,
-                            optionRole: optionRole,
-                        });
-                    } else {
-                        res.redirect('/admin-permissions/index')
-                    }
-
-                }
-
-            });
-
+            dataEntity = await controller.getEntityById(req.params.id);
+            if (dataEntity) {
+                res.render('AdminPermissions/view.ejs', {
+                    title: 'addddddd',
+                    error: req.flash("error"),
+                    success: req.flash("success"),
+                    info: req.flash('info'),
+                    csrfToken: req.csrfToken(),
+                    adminPermission: dataEntity,
+                    optionRole: optionRole,
+                });
+            } else {
+                res.redirect('/admin-permissions/index')
+            }
         }
     } else {
         res.redirect('/admin-permissions/index')
@@ -252,10 +166,8 @@ exports.delete = (req, res) => {
                 }
 
             });
-
         }
     } else {
         res.redirect('/admin-permissions/index')
     }
-
 };

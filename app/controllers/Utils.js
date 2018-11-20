@@ -54,6 +54,7 @@ class Controller {
         this.res = res;
         this.table = require("../models/" + TableName + 'Table');
         this.uploadPath = {};
+        this.Routes = require('../../config/listRoutes').Controller;
     };
     async uploadFile(fieldName) {
         let testUtility = new Utility();
@@ -177,6 +178,67 @@ class Controller {
             return false;
         }
     }
+    buildRoutes(routesPart) {
+        const url = require('url');
+        const empty = require('is-empty');
+        const camelCase = require('camelcase');
+        const Inflector = require('inflector-js');
+        const fullUrl = url.parse(this.req.protocol + '://' + this.req.get('host') + this.req.originalUrl);
+        let pathParams = fullUrl.pathname.split('/')
+        let controllersList = this.Routes;
+        let prefix = '';
+        let controller = '';
+        if (!empty(controllersList.__prefix) || !empty(routesPart.prefix)) {
+            if (!empty(routesPart.prefix)) {
+                prefix = controllersList.__prefix;
+            } else {
+                prefix = routesPart.prefix;
+            }
+        }
+        if (!empty(routesPart.controller)) {
+            controller = routesPart.controller;
+        } else {
+            for (var key in pathParams) {
+                if (pathParams.hasOwnProperty(key)) {
+                    if ((key !== '0') && (pathParams[key] === prefix)) {
+                        controller = pathParams[key - 1];
+                        break;
+                    }
+                }
+            }
+            if (empty(controller)) {
+                controller = camelCase(pathParams[1],{pascalCase: true});
+            }
+        }
+
+        let action = 'index';
+        if (!empty(routesPart.action)) {
+            action = routesPart.action;
+        }
+        if (!empty(controllersList[controller][action])) {
+            let routesInConfig = !empty(controllersList[controller][action].routes) ? controllersList[controller][action].routes : '';
+            if (!empty(routesInConfig)) {
+                let options = ''
+                if (!empty(routesPart.options)) {
+                    let linkIncudeOptions = routesInConfig;
+                    for (var optionField in routesPart.options) {
+                        if (routesPart.options.hasOwnProperty(optionField)) {
+                            linkIncudeOptions = linkIncudeOptions.replace(':' + optionField, routesPart.options[optionField]);
+                        }
+                    }
+                    return linkIncudeOptions;
+                } else {
+                    return routesInConfig;
+                }
+            } else {
+                return '/' + Inflector.dasherize(Inflector.underscore(controller)) + '/' + Inflector.dasherize(Inflector.underscore(action));
+            }
+
+        } else {
+            return '#';
+        }
+    }
+
 }
 class Utility {
     constructor() {
@@ -195,6 +257,28 @@ class Utility {
         this.express = require('express');
         this.paginate = require('express-paginate');;
         this.app = this.express();
+        this.buildRoutes = (controller, action, pass = []) => {
+            let controllersList = {};
+            controllersList = this.Routes;
+            for (var controller in controllersList) {
+                if (controller == '__prefix') {
+                    var __prefix = controller;
+                }
+                for (var action in controllersList[controller]) {
+                    if (controller == '__prefix') {
+                        var __prefix = controllersList[controller];
+                    }
+                    if (controllersList[controller].hasOwnProperty(action) && (controller !== '__prefix')) {
+                        if (controllersList[controller][action].routes == "") {
+                            controllersList[controller][action].routes = '/' + this.Inflector.dasherize(this.Inflector.underscore(controller)) + '/' + this.Inflector.dasherize(this.Inflector.underscore(action));
+                        }
+                        controllersList[controller][action].link = __prefix + controllersList[controller][action].routes
+                    }
+                }
+            }
+            console.log(controllersList);
+            return controllersList;
+        }
     }
 
 }

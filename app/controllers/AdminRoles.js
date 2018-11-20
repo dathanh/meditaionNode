@@ -1,53 +1,17 @@
-var numeral = require('numeral');
-var express = require('express');
-var app = express();
-var bcrypt = require('bcrypt-nodejs');
-var dateFormat = require('dateformat');
-var flash = require('connect-flash')
-var constant = require('../../config/constants');
-var mongoose = require('mongoose');
 var AdminRolesTable = require("../models/AdminRolesTable");
-var Validator = require('Validator')
-const paginate = require('express-paginate');
+const Utils = require('../controllers/Utils');
+const Utility = new Utils.Utility();
 var rules = {
     name: 'required',
     description: 'required',
     status: 'required',
 }
-app.locals.pathVariable = {
+Utility.app.locals.pathVariable = {
     path: ''
 };
 exports.index = async (req, res) => {
-    var search = {};
-    if (req.query.title) {
-        search = {
-            $or: [{
-                description: new RegExp(req.query.title, "i"),
-            }, {
-                name: new RegExp(req.query.title, "i"),
-            }]
-        }
-    }
-    console.log(search);
-    if (req.query.sort) {
-        let filter = {}
-        filter[req.query.sort] = req.query.order;
-        console.log(filter);
-        var [results, itemCount] = await Promise.all([
-            AdminRolesTable.find(search).limit(req.query.limit).sort(filter).skip(req.skip).lean().exec(),
-            AdminRolesTable.count(search)
-        ]);
-
-    } else {
-        var [results, itemCount] = await Promise.all([
-            AdminRolesTable.find(search).limit(req.query.limit).skip(req.skip).lean().exec(),
-            AdminRolesTable.count(search)
-        ]);
-
-    }
-
-    const pageCount = Math.ceil(itemCount / req.query.limit);
-
+    let response = new Utils.Controller(req, res, 'AdminRoles');
+    var paginations = await response.pagination();
     res.render('AdminRoles/index.ejs', {
         csrfToken: req.csrfToken(),
         req: req,
@@ -55,159 +19,122 @@ exports.index = async (req, res) => {
         error: req.flash("error"),
         success: req.flash("success"),
         info: req.flash('info'),
-        listRoles: results,
-        pageCount,
-        itemCount,
+        listRoles: paginations.results,
+        pageCount: paginations.pageCount,
+        itemCount: paginations.itemCount,
         currentPage: req.query.page,
-        pages: paginate.getArrayPages(req)(3, pageCount, req.query.page),
-        has_more: paginate.hasNextPages(req)(pageCount),
+        pages: Utility.paginate.getArrayPages(req)(3, paginations.pageCount, req.query.page),
+        has_more: Utility.paginate.hasNextPages(req)(paginations.pageCount),
     });
 
 };
-exports.add = (req, res) => {
-    if (app.locals.pathVariable.path != req.path) {
-        app.locals.pathVariable = '';
+exports.add = async (req, res) => {
+    if (Utility.app.locals.pathVariable.path != req.path) {
+        Utility.app.locals.pathVariable = '';
     }
     if (req.method == "POST") {
-        AdminRolesTable.find({}).sort([
-            ['_id', 'descending']
-        ]).limit(1).exec((err, AdminRoleDB) => {
-            var v = Validator.make(req.body, rules);
-            if (v.fails()) {
-                console.log(v.getErrors());
-                app.locals.pathVariable = {
-                    errors: v.getErrors(),
-                    path: req.path,
-                };
-                res.redirect('/admin-roles/add');
-            } else {
-                let AdminRole = new AdminRolesTable();
-                var day = dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
-                AdminRole._id = (AdminRoleDB.hasOwnProperty('0')) ? AdminRoleDB[0]._id + 1 : 1;
-                AdminRole.name = req.body.name;
-                AdminRole.description = req.body.description;
-                AdminRole.status = (req.body.status) ? 'active' : 'inactive';
-                AdminRole.created_date = day;
-                AdminRole.updated_date = day;
+        let controller = new Utils.Controller(req, res, 'AdminRoles');
+        var v = Utility.Validator.make(req.body, rules);
+        if (v.fails()) {
+            console.log(v.getErrors());
+            Utility.app.locals.pathVariable = {
+                errors: v.getErrors(),
+                path: req.path,
+            };
+            res.redirect('/admin-roles/add');
+        } else {
+            let AdminRole = await controller.createEntity(req.body);
+            AdminRole.save(function(err, result) {
+                if (err) {
+                    error = req.flash('error', 'cant not save data');
+                    res.redirect('/admin/admin-roles/add');
+                } else {
+                    success = req.flash('success', 'update complete');
+                    res.redirect('/admin/admin-roles/index');
+                }
+            });
+        }
 
-                AdminRole.save(function(err, result) {
-                    if (err) {
-                        throw err;
-                        console.log("Error:", err);
-                    } else {
-                        console.log('success');
-                        res.redirect('/admin-roles/index');
-                    }
-
-                });
-            }
-            // res.redirect('/admin-roles/index');
-
-        });
-
-    } else if (req.method == "GET") {
+    } else {
         res.render('AdminRoles/add.ejs', {
             title: 'addddddd',
             error: req.flash("error"),
-            errors: app.locals.pathVariable.errors,
+            errors: Utility.app.locals.pathVariable.errors,
             success: req.flash("success"),
             info: req.flash('info'),
             csrfToken: req.csrfToken()
         });
     }
 
-
 };
-exports.edit = (req, res) => {
+exports.edit = async (req, res) => {
     if (req.params.id.length > 0) {
-        if (app.locals.pathVariable.path != req.path) {
-            app.locals.pathVariable = '';
+        if (Utility.app.locals.pathVariable.path != req.path) {
+            Utility.app.locals.pathVariable = '';
         }
+        let controller = new Utils.Controller(req, res, 'AdminRoles');
         if (req.method == "POST") {
-            var day = dateFormat(Date.now(), "yyyy-mm-dd HH:MM:ss");
-            AdminRolesTable.findByIdAndUpdate(req.params.id, {
-                $set: {
-                    name: req.body.name,
-                    description: req.body.description,
-                    status: (req.body.status) ? 'active' : 'inactive',
-                    updated_date: day,
-                }
-            }, {
-                new: true
-            }, function(err, result) {
-                if (err) {
-                    throw err;
-                    console.log("Error:", err);
-                } else {
-                    console.log('success');
-                    res.redirect('/admin-roles/index');
-                }
-            });
-
-        } else if (req.method == "GET") {
-            AdminRolesTable.findOne({
-                _id: req.params.id
-            }).exec((err, result) => {
-                if (err) {
-                    console.log("Error:", err);
-
-                } else {
-                    if (result) {
-                        res.render('AdminRoles/edit.ejs', {
-                            title: 'addddddd',
-                            error: req.flash("error"),
-                            success: req.flash("success"),
-                            info: req.flash('info'),
-                            errors: app.locals.pathVariable.errors,
-                            csrfToken: req.csrfToken(),
-                            adminRole: result,
-                        });
+            var v = Utility.Validator.make(req.body, rules);
+            if (v.fails()) {
+                Utility.app.locals.pathVariable = {
+                    errors: v.getErrors(),
+                    path: req.path,
+                };
+                info = req.flash('info');
+                success = req.flash('success');
+                error = req.flash('error');
+                res.redirect('back');
+            } else {
+                await controller.updateById(req.params.id, req.body, (data) => {
+                    if (data) {
+                        success = req.flash('success', 'update complete');
+                        res.redirect('/admin/admin-roles/index');
                     } else {
-                        res.redirect('/admin-roles/index')
+                        error = req.flash('error', 'cant not save data');
+                        res.redirect('back');
                     }
-
-                }
-
-            });
-
+                });
+            }
+        } else {
+            dataEntity = await controller.getEntityById(req.params.id);
+            if (dataEntity) {
+                res.render('AdminRoles/edit.ejs', {
+                    title: 'addddddd',
+                    error: req.flash("error"),
+                    success: req.flash("success"),
+                    info: req.flash('info'),
+                    errors: Utility.app.locals.pathVariable.errors,
+                    csrfToken: req.csrfToken(),
+                    adminRole: dataEntity,
+                });
+            } else {
+                res.redirect('/admin/admin-roles/index')
+            }
         }
     } else {
-        res.redirect('/admin-roles/index')
+        res.redirect('/admin/admin-roles/index')
     }
-
 };
-exports.view = (req, res) => {
+exports.view = async (req, res) => {
     if (req.params.id.length > 0) {
         if (req.method == "GET") {
-            AdminRolesTable.findOne({
-                _id: req.params.id
-            }).exec((err, result) => {
-                if (err) {
-                    console.log("Error:", err);
-
-                } else {
-                    if (result) {
-                        res.render('AdminRoles/view.ejs', {
-                            title: 'addddddd',
-                            error: req.flash("error"),
-                            success: req.flash("success"),
-                            info: req.flash('info'),
-                            csrfToken: req.csrfToken(),
-                            adminRole: result
-                        });
-                    } else {
-                        res.redirect('/admin-roles/index')
-                    }
-
-                }
-
-            });
-
+            dataEntity = await controller.getEntityById(req.params.id);
+            if (dataEntity) {
+                res.render('AdminRoles/view.ejs', {
+                    title: 'addddddd',
+                    error: req.flash("error"),
+                    success: req.flash("success"),
+                    info: req.flash('info'),
+                    csrfToken: req.csrfToken(),
+                    adminRole: dataEntity,
+                });
+            } else {
+                res.redirect('/admin-roles/index')
+            }
         }
     } else {
         res.redirect('/admin-roles/index')
     }
-
 };
 exports.delete = (req, res) => {
     if (req.params.id.length > 0) {
@@ -221,12 +148,9 @@ exports.delete = (req, res) => {
                 } else {
                     res.redirect('/admin-roles/index');
                 }
-
             });
-
         }
     } else {
         res.redirect('/admin-roles/index')
     }
-
 };

@@ -90,7 +90,7 @@ app.locals = {
 app.locals.info = {};
 app.locals.success = {};
 app.locals.error = {};
-app.locals.Routes = Utility.Routes;
+
 require('./config/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
 

@@ -49,10 +49,6 @@ module.exports = {
                 }
             }
         }
-        app.locals = {
-            Controller: resource['Controller'],
-            Api: resource['Api']
-        }
     },
     getResource: () => resource,
     setResource: listRoutes => resource = listRoutes,
