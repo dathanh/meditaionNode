@@ -63,9 +63,9 @@
                             <%= user.created_date %>
                         </td>
                         <td class="actions">
-                            <a class="btn btn-primary" href="/admin-users/view/<%= user._id %>"><i class="fa fa-eye"></i></a>
-                            <a class="btn btn-success" href="/admin-users/edit/<%= user._id %>"><i class="fa fa-edit"></i></a>
-                            <form method="post" style="display:none;" action="/admin-users/delete/<%= user._id %>" id="postDelete_<%= user._id %>">
+                            <a class="btn btn-primary" href="<%= buildRoutes({action:'view',options:{id:user._id}},req) %>"><i class="fa fa-eye"></i></a>
+                            <a class="btn btn-success" href="<%= buildRoutes({action:'edit',options:{id:user._id}},req) %>"><i class="fa fa-edit"></i></a>
+                            <form method="post" style="display:none;" action="<%= buildRoutes({action:'delete',options:{id:user._id}},req) %>" id="postDelete_<%= user._id %>">
                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             </form>
                                 <a class="btn btn-danger" onclick='if (confirm("Are you sure you want to delete # 12?")) { document.getElementById("postDelete_<%= user._id %>").submit(); } event.returnValue = false; return false;' href="#"><i class="fa fa-trash-o"></i></a>

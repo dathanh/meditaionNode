@@ -7,7 +7,7 @@ module.exports = [{
             name: 'List Admin Usres',
         },
         add: {
-            link: '/admin-users/add',
+            link: '/admin/admin-users/add',
             name: 'Add Admin Usres'
         }
     },

@@ -54,7 +54,6 @@ class Controller {
         this.res = res;
         this.table = require("../models/" + TableName + 'Table');
         this.uploadPath = {};
-        this.Routes = require('../../config/listRoutes').Controller;
     };
     async uploadFile(fieldName) {
         let testUtility = new Utility();
@@ -178,36 +177,39 @@ class Controller {
             return false;
         }
     }
-    buildRoutes(routesPart) {
+    buildRoutes(routesPart, request = this.req) {
         const url = require('url');
         const empty = require('is-empty');
         const camelCase = require('camelcase');
         const Inflector = require('inflector-js');
-        const fullUrl = url.parse(this.req.protocol + '://' + this.req.get('host') + this.req.originalUrl);
+        const fullUrl = url.parse(request.protocol + '://' + request.get('host') + request.originalUrl);
         let pathParams = fullUrl.pathname.split('/')
-        let controllersList = this.Routes;
+        let controllersList = require('../../config/listRoutes').Controller;
         let prefix = '';
         let controller = '';
         if (!empty(controllersList.__prefix) || !empty(routesPart.prefix)) {
-            if (!empty(routesPart.prefix)) {
-                prefix = controllersList.__prefix;
+            if (empty(routesPart.prefix)) {
+                prefix = controllersList.__prefix.replace('/', '');
             } else {
                 prefix = routesPart.prefix;
             }
         }
         if (!empty(routesPart.controller)) {
-            controller = routesPart.controller;
         } else {
             for (var key in pathParams) {
                 if (pathParams.hasOwnProperty(key)) {
                     if ((key !== '0') && (pathParams[key] === prefix)) {
-                        controller = pathParams[key - 1];
+                        controller = camelCase(pathParams[parseInt(key) + 1], {
+                            pascalCase: true
+                        });
                         break;
                     }
                 }
             }
             if (empty(controller)) {
-                controller = camelCase(pathParams[1],{pascalCase: true});
+                controller = camelCase(pathParams[1], {
+                    pascalCase: true
+                });
             }
         }
 
@@ -215,6 +217,7 @@ class Controller {
         if (!empty(routesPart.action)) {
             action = routesPart.action;
         }
+
         if (!empty(controllersList[controller][action])) {
             let routesInConfig = !empty(controllersList[controller][action].routes) ? controllersList[controller][action].routes : '';
             if (!empty(routesInConfig)) {
@@ -276,7 +279,6 @@ class Utility {
                     }
                 }
             }
-            console.log(controllersList);
             return controllersList;
         }
     }

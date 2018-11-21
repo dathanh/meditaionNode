@@ -60,9 +60,9 @@
                     <div class="container-fluid">
                         <div class="row admin-btn-actions">
 
-                            <a href="/admin-roles/index" class="btn btn-white" title="Back to roles"><i class="fa fa-chevron-left"></i> Back</a>
-                            <a href="/admin-roles/edit/<%= adminRole._id %>" class="btn btn-primary" title="Edit this role"><i class="fa fa-edit"></i> Edit</a>
-                            <form method="post" style="display:none;" action="/admin-roles/delete/<%= adminRole._id %>" id="postDelete_<%= adminRole._id %>">
+                            <a href="<%= buildRoutes({action:'index'},req) %>" class="btn btn-white" title="Back to roles"><i class="fa fa-chevron-left"></i> Back</a>
+                            <a href="<%= buildRoutes({action:'edit',options:{id:adminRole._id}},req) %>" class="btn btn-primary" title="Edit this role"><i class="fa fa-edit"></i> Edit</a>
+                            <form method="post" style="display:none;" action="<%= buildRoutes({action:'delete',options:{id:adminRole._id}},req) %>" id="postDelete_<%= adminRole._id %>">
                                 <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                             </form>
                                 <a class="btn btn-danger" onclick='if (confirm("Are you sure you want to delete # <%= adminRole._id %>?")) { document.getElementById("postDelete_<%= adminRole._id %>").submit(); } event.returnValue = false; return false;' href="#"><i class="fa fa-trash-o"></i>Delete</a>

@@ -7,90 +7,90 @@ var routesList = {
         AdminUsers: {
             index: {
                 method: ["get"],
-                routes: "/admin-users/index",
+                routes: "/admin/admin-users/index",
                 link: "/admin-users/index",
             },
             add: {
                 method: ["get", "post", "put"],
-                routes: "",
+                routes: "/admin/admin-users/add",
             },
             edit: {
                 method: ["post", "put", 'get'],
-                routes: "/admin-users/edit/:id",
+                routes: "/admin/admin-users/edit/:id",
             },
             view: {
                 method: ['get'],
-                routes: "/admin-users/view/:id",
+                routes: "/admin/admin-users/view/:id",
             },
             delete: {
                 method: ["delete", "put", "post"],
-                routes: "/admin-users/delete/:id",
+                routes: "/admin/admin-users/delete/:id",
             },
         },
         AdminPermissions: {
             index: {
                 method: ["get"],
-                routes: "/admin-permissions/index",
+                routes: "/admin/admin-permissions/index",
             },
             add: {
                 method: ["get", "post", "put"],
-                routes: "",
+                routes: "/admin/admin-permissions/add",
             },
             edit: {
                 method: ["post", "put", 'get'],
-                routes: "/admin-permissions/edit/:id",
+                routes: "/admin/admin-permissions/edit/:id",
             },
             view: {
                 method: ['get'],
-                routes: "/admin-permissions/view/:id",
+                routes: "/admin/admin-permissions/view/:id",
             },
             delete: {
                 method: ["delete", "put", "post"],
-                routes: "/admin-permissions/delete/:id",
+                routes: "/admin/admin-permissions/delete/:id",
             },
         },
         AdminRoles: {
             index: {
                 method: ["get"],
-                routes: "/admin-roles/index",
+                routes: "/admin/admin-roles/index",
             },
             add: {
                 method: ["get", "post", "put"],
-                routes: "",
+                routes: "/admin/admin-roles/add",
             },
             edit: {
                 method: ["post", "put", 'get'],
-                routes: "/admin-roles/edit/:id",
+                routes: "/admin/admin-roles/edit/:id",
             },
             view: {
                 method: ['get'],
-                routes: "/admin-roles/view/:id",
+                routes: "/admin/admin-roles/view/:id",
             },
             delete: {
                 method: ["delete", "put", "post"],
-                routes: "/admin-roles/delete/:id",
+                routes: "/admin/admin-roles/delete/:id",
             },
         },
         Articles: {
             index: {
                 method: ["get"],
-                routes: "/articles/index",
+                routes: "/admin/articles/index",
             },
             add: {
                 method: ["get", "post", "put"],
-                routes: "/articles/add",
+                routes: "/admin/articles/add",
             },
             edit: {
                 method: ["post", "put", 'get'],
-                routes: "/articles/edit/:id",
+                routes: "/admin/articles/edit/:id",
             },
             view: {
                 method: ['get'],
-                routes: "/articles/view/:id",
+                routes: "/admin/articles/view/:id",
             },
             delete: {
                 method: ["delete", "put", "post"],
-                routes: "/articles/delete/:id",
+                routes: "/admin/articles/delete/:id",
             },
         },
         AwsArticles: {

@@ -10,11 +10,12 @@ Utility.app.locals.pathVariable = {
     path: ''
 };
 exports.index = async (req, res) => {
-    let response = new Utils.Controller(req, res, 'AdminRoles');
-    var paginations = await response.pagination();
+    let controller = new Utils.Controller(req, res, 'AdminRoles');
+    var paginations = await controller.pagination();
     res.render('AdminRoles/index.ejs', {
         csrfToken: req.csrfToken(),
         req: req,
+        buildRoutes: controller.buildRoutes,
         title: 'Home page',
         error: req.flash("error"),
         success: req.flash("success"),
@@ -32,8 +33,8 @@ exports.add = async (req, res) => {
     if (Utility.app.locals.pathVariable.path != req.path) {
         Utility.app.locals.pathVariable = '';
     }
+    let controller = new Utils.Controller(req, res, 'AdminRoles');
     if (req.method == "POST") {
-        let controller = new Utils.Controller(req, res, 'AdminRoles');
         var v = Utility.Validator.make(req.body, rules);
         if (v.fails()) {
             console.log(v.getErrors());
@@ -58,6 +59,8 @@ exports.add = async (req, res) => {
     } else {
         res.render('AdminRoles/add.ejs', {
             title: 'addddddd',
+            req: req,
+            buildRoutes: controller.buildRoutes,
             error: req.flash("error"),
             errors: Utility.app.locals.pathVariable.errors,
             success: req.flash("success"),
@@ -100,6 +103,8 @@ exports.edit = async (req, res) => {
             if (dataEntity) {
                 res.render('AdminRoles/edit.ejs', {
                     title: 'addddddd',
+                    req: req,
+                    buildRoutes: controller.buildRoutes,
                     error: req.flash("error"),
                     success: req.flash("success"),
                     info: req.flash('info'),
@@ -122,6 +127,8 @@ exports.view = async (req, res) => {
             if (dataEntity) {
                 res.render('AdminRoles/view.ejs', {
                     title: 'addddddd',
+                    req: req,
+                    buildRoutes: controller.buildRoutes,
                     error: req.flash("error"),
                     success: req.flash("success"),
                     info: req.flash('info'),

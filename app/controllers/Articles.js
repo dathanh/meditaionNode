@@ -14,11 +14,12 @@ Utility.app.locals.pathVariable = {
     path: ''
 };
 exports.index = async (req, res) => {
-    let response = new Utils.Controller(req, res, 'Articles');
-    var paginations = await response.pagination();
+    let controller = new Utils.Controller(req, res, 'Articles');
+    var paginations = await controller.pagination();
     res.render('Articles/index.ejs', {
         csrfToken: req.csrfToken(),
         req: req,
+        buildRoutes: controller.buildRoutes,
         title: 'Home page',
         error: req.flash("error"),
         success: req.flash("success"),
@@ -36,8 +37,8 @@ exports.add = async (req, res) => {
     if (Utility.app.locals.pathVariable.path != req.path) {
         Utility.app.locals.pathVariable = '';
     }
+    let controller = new Utils.Controller(req, res, 'Articles');
     if (req.method == "POST") {
-        let controller = new Utils.Controller(req, res, 'Articles');
         var v = Utility.Validator.make(req.body, rules);
         if (v.fails()) {
             Utility.app.locals.pathVariable = {
@@ -72,8 +73,11 @@ exports.add = async (req, res) => {
             error: req.flash("error"),
             errors: Utility.app.locals.pathVariable.errors,
             info: req.flash('info'),
+            buildRoutes: controller.buildRoutes,
             success: req.flash("success"),
-            csrfToken: req.csrfToken()
+            csrfToken: req.csrfToken(),
+            req: req,
+            buildRoutes: controller.buildRoutes,
         });
     }
 
@@ -127,6 +131,8 @@ exports.edit = async (req, res) => {
                     error: req.flash("error"),
                     success: req.flash("success"),
                     info: req.flash('info'),
+                    req: req,
+                    buildRoutes: controller.buildRoutes,
                     errors: Utility.app.locals.pathVariable.errors,
                     csrfToken: req.csrfToken(),
                     article: dataEntity,
@@ -155,6 +161,8 @@ exports.view = async (req, res) => {
                     errors: Utility.app.locals.pathVariable.errors,
                     csrfToken: req.csrfToken(),
                     article: dataEntity,
+                    req: req,
+                    buildRoutes: controller.buildRoutes,
                 });
             } else {
                 res.redirect('/admin/articles/index')
